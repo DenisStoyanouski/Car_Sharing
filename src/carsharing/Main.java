@@ -2,7 +2,11 @@ package carsharing;
 
 public class Main {
 
-    public static void main(String[] args) {
+    private static String databaseFileName = "carsharing";
 
+    public static void main(String[] args) {
+        if (args.length == 2) {
+            databaseFileName = args[1];
+        }
     }
 }
