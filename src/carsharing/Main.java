@@ -8,7 +8,8 @@ public class Main {
         if (args.length == 2) {
             databaseFileName = args[1];
         }
-        DataBase.create(databaseFileName);
+        DataBase.setName(databaseFileName);
+        DataBase.create();
 
     }
 }

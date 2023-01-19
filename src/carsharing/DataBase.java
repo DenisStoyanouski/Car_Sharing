@@ -7,17 +7,20 @@ import java.sql.Statement;
 
 class DataBase {
     // JDBC driver name and database URL
-    static final String JDBC_DRIVER = "org.h2.Driver";
-
-    private static String databaseFileName;
-    static final String DB_URL = String.format("jdbc:h2:./Car Sharing/task/src/carsharing/db/%s", databaseFileName);
+    private static final String JDBC_DRIVER = "org.h2.Driver";
+    private static  String databaseFileName;
+    private static final String DB_URL = "jdbc:h2:./src/carsharing/db/";
 
 
     //  Database credentials
-    static final String USER = "denis";
+    static final String USER = "";
     static final String PASS = "";
 
-    public static void create(String databaseFileName) {
+    public static void setName(String name) {
+        databaseFileName = name;
+    }
+
+    public static void create() {
         Connection conn = null;
         Statement stmt = null;
         try {
@@ -26,19 +29,19 @@ class DataBase {
 
             //STEP 2: Open a connection
             System.out.println("Connecting to database...");
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            conn = DriverManager.getConnection(DB_URL + databaseFileName);
+            conn.setAutoCommit(true);
 
             //STEP 3: Execute a query
             System.out.println("Creating table in given database...");
             stmt = conn.createStatement();
-            String sql =  "CREATE TABLE   REGISTRATION " +
+            String sql =  "CREATE TABLE COMPANY  " +
                     "(id INTEGER not NULL, " +
-                    " first VARCHAR(255), " +
-                    " last VARCHAR(255), " +
-                    " age INTEGER, " +
+                    " name VARCHAR(255), " +
                     " PRIMARY KEY ( id ))";
             stmt.executeUpdate(sql);
             System.out.println("Created table in given database...");
+            conn.commit();
 
             // STEP 4: Clean-up environment
             stmt.close();
