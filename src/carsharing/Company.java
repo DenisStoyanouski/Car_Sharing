@@ -2,11 +2,15 @@ package carsharing;
 
 public class Company {
     private String name;
-    private int rollNo = 1;
+    private int rollNo;
+
+    private static int counter;
 
     Company(String name){
+        counter++;
         this.name = name;
-        rollNo++;
+        this.rollNo = counter;
+
     }
 
     public String getName() {

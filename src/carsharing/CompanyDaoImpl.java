@@ -18,16 +18,18 @@ public class CompanyDaoImpl implements CompanyDao {
             System.out.println("Company: Roll No " + Company.getRollNo() + ", deleted from database");
         }
 
-        //retrive list of Companies from the database
+        //retrieve list of Companies from the database
         @Override
         public void getAllCompanies() {
             if (Companies.isEmpty()) {
                 System.out.println("The company list is empty!");
+                System.out.println();
             } else {
                 System.out.println("Company list:");
                 for (Company company : Companies) {
                     System.out.println(company.getRollNo() + ". " + company.getName());
                 }
+                System.out.println();
             }
         }
 
@@ -45,5 +47,6 @@ public class CompanyDaoImpl implements CompanyDao {
         @Override
         public void addCompany(String name) {
             Companies.add(new Company(name));
+            System.out.println("The company was created!");
     }
 }

@@ -4,10 +4,11 @@ import java.util.Scanner;
 
 public class Menu {
     public static void start() {
-        System.out.println("1. Log in as a manager");
-        System.out.println("0. Exit");
+
         String item;
         while (true) {
+            System.out.println("1. Log in as a manager");
+            System.out.println("0. Exit");
             item = input();
             switch (item) {
                 case "1" : queryMenu();
@@ -27,16 +28,17 @@ public class Menu {
 
     private static String input() {
         Scanner scanner = new Scanner(System.in);
-        return scanner.next();
+        return scanner.nextLine();
     }
 
     private static void queryMenu() {
-        System.out.println("1. Company list");
-        System.out.println("2. Create a company");
-        System.out.println("0. Back");
+
         String item;
         CompanyDaoImpl companies = new CompanyDaoImpl();
         while (true) {
+            System.out.println("1. Company list");
+            System.out.println("2. Create a company");
+            System.out.println("0. Back");
             item = input();
             switch(item) {
                 case "1" :
