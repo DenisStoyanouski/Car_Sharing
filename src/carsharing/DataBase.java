@@ -37,8 +37,8 @@ class DataBase {
             System.out.println("Creating table in given database...");
             stmt = conn.createStatement();
             String sql =  "CREATE TABLE COMPANY  " +
-                    "(id INTEGER not NULL, " +
-                    " name VARCHAR(255), " +
+                    "(id INTEGER AUTO_INCREMENT, " +
+                    " name VARCHAR(255) UNIQUE , NOT NULL" +
                     " PRIMARY KEY ( id ))";
             stmt.executeUpdate(sql);
             System.out.println("Created table in given database...");
