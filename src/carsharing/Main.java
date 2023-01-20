@@ -10,6 +10,6 @@ public class Main {
         }
         DataBase.setName(databaseFileName);
         DataBase.create();
-
+        Menu.start();
     }
 }

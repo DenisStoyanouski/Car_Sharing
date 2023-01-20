@@ -1,5 +1,6 @@
 package carsharing;
 
+import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,10 +11,6 @@ public class CompanyDaoImpl implements CompanyDao {
 
         public CompanyDaoImpl(){
             Companies = new ArrayList<Company>();
-            Company Company1 = new Company("Company1",0);
-            Company Company2 = new Company("John",1);
-            Companies.add(Company1);
-            Companies.add(Company2);
         }
         @Override
         public void deleteCompany(Company Company) {
@@ -23,8 +20,15 @@ public class CompanyDaoImpl implements CompanyDao {
 
         //retrive list of Companies from the database
         @Override
-        public List<Company> getAllCompanies() {
-            return Companies;
+        public void getAllCompanies() {
+            if (Companies.isEmpty()) {
+                System.out.println("The company list is empty!");
+            } else {
+                System.out.println("Company list:");
+                for (Company company : Companies) {
+                    System.out.println(company.getRollNo() + ". " + company.getName());
+                }
+            }
         }
 
         @Override
@@ -37,4 +41,9 @@ public class CompanyDaoImpl implements CompanyDao {
             Companies.get(Company.getRollNo()).setName(Company.getName());
             System.out.println("Company: Roll No " + Company.getRollNo() + ", updated in the database");
         }
+
+        @Override
+        public void addCompany(String name) {
+            Companies.add(new Company(name));
+    }
 }

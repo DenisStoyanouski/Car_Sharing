@@ -2,11 +2,11 @@ package carsharing;
 
 public class Company {
     private String name;
-    private int rollNo;
+    private int rollNo = 1;
 
-    Company(String name, int rollNo){
+    Company(String name){
         this.name = name;
-        this.rollNo = rollNo;
+        rollNo++;
     }
 
     public String getName() {
