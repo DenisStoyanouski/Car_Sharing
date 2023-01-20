@@ -1,5 +1,6 @@
 package carsharing;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -9,7 +10,7 @@ class DataBase {
     // JDBC driver name and database URL
     private static final String JDBC_DRIVER = "org.h2.Driver";
     private static  String databaseFileName;
-    private static final String DB_URL = "jdbc:h2:./src/carsharing/db/";
+    private static final String DB_URL = String.format("jdbc:h2:.%1$ssrc%1$scarsharing%1$sdb%1$s", File.separator);
 
 
     //  Database credentials
