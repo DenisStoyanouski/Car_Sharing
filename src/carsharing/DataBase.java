@@ -11,7 +11,7 @@ class DataBase {
     static Connection conn = null;
     // JDBC driver name and database URL
     private static final String JDBC_DRIVER = "org.h2.Driver";
-    private static  String databaseFileName;
+    private final String databaseFileName;
     private static final String DB_URL = String.format("jdbc:h2:.%1$ssrc%1$scarsharing%1$sdb%1$s", File.separator);
 
 
@@ -19,11 +19,11 @@ class DataBase {
     static final String USER = "";
     static final String PASS = "";
 
-    public static void setName(String name) {
-        databaseFileName = name;
+    DataBase(String databaseFileName) {
+        this.databaseFileName = databaseFileName;
     }
 
-    public static Connection getConnection() throws SQLException {
+    public Connection getConnection() {
 
         // STEP 1: Register JDBC driver
         try {
@@ -44,7 +44,7 @@ class DataBase {
         return conn;
     }
 
-    public static void createTable() {
+    public void createTable() {
         System.out.println("Creating table in given database...");
         try (Statement stmt = conn.createStatement()) {
             String sql =  "CREATE TABLE COMPANY  " +

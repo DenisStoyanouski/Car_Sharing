@@ -27,6 +27,7 @@ public class CompanyDaoImpl implements CompanyDao {
             try (Statement stmt = conn.createStatement()) {
                 String query = "SELECT * FROM COMPANY";
                 ResultSet rs = stmt.executeQuery(query);
+
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

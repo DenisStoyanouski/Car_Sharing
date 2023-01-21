@@ -7,13 +7,13 @@ public class Main {
 
     private static String databaseFileName = "carsharing";
 
-    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+    public static void main(String[] args) throws SQLException {
         if (args.length == 2) {
             databaseFileName = args[1];
         }
-        DataBase.setName(databaseFileName);
-        Connection conn = DataBase.getConnection();
-        DataBase.createTable();
+        DataBase db = new DataBase(databaseFileName);
+        Connection conn = db.getConnection();
+        db.createTable();
         Menu.start(conn);
     }
 }
