@@ -27,19 +27,17 @@ public class CompanyDaoImpl implements CompanyDao {
             try (Statement stmt = conn.createStatement()) {
                 String query = "SELECT * FROM COMPANY";
                 ResultSet rs = stmt.executeQuery(query);
-
+                if (!rs.wasNull()) {
+                    while (rs.next()) {
+                        int id = rs.getInt("id");
+                        String name = rs.getString("name");
+                        System.out.println(id + ". " + name);
+                    }
+                } else {
+                    System.out.println("The company list is empty!");
+                }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
-            }
-            if (Companies.isEmpty()) {
-                System.out.println("The company list is empty!");
-                System.out.println();
-            } else {
-                System.out.println("Company list:");
-                for (Company company : Companies) {
-                    System.out.println(company.getRollNo() + ". " + company.getName());
-                }
-                System.out.println();
             }
         }
 
