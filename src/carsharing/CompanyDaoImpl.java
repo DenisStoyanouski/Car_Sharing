@@ -1,6 +1,9 @@
 package carsharing;
 
-import java.lang.ref.SoftReference;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,14 +16,20 @@ public class CompanyDaoImpl implements CompanyDao {
             Companies = new ArrayList<Company>();
         }
         @Override
-        public void deleteCompany(Company Company) {
+        public void deleteCompany(Connection conn, Company Company) {
             Companies.remove(Company.getRollNo());
             System.out.println("Company: Roll No " + Company.getRollNo() + ", deleted from database");
         }
 
         //retrieve list of Companies from the database
         @Override
-        public void getAllCompanies() {
+        public void getAllCompanies(Connection conn) {
+            try (Statement stmt = conn.createStatement()) {
+                String query = "SELECT * FROM COMPANY";
+                ResultSet rs = stmt.executeQuery(query);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
             if (Companies.isEmpty()) {
                 System.out.println("The company list is empty!");
                 System.out.println();
@@ -34,18 +43,18 @@ public class CompanyDaoImpl implements CompanyDao {
         }
 
         @Override
-        public Company getCompany(int rollNo) {
+        public Company getCompany(Connection conn, int rollNo) {
             return Companies.get(rollNo);
         }
 
         @Override
-        public void updateCompany(Company Company) {
+        public void updateCompany(Connection conn, Company Company) {
             Companies.get(Company.getRollNo()).setName(Company.getName());
             System.out.println("Company: Roll No " + Company.getRollNo() + ", updated in the database");
         }
 
         @Override
-        public void addCompany(String name) {
+        public void addCompany(Connection conn, String name) {
             Companies.add(new Company(name));
             System.out.println("The company was created!");
     }

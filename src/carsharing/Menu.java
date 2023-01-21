@@ -1,9 +1,10 @@
 package carsharing;
 
+import java.sql.Connection;
 import java.util.Scanner;
 
 public class Menu {
-    public static void start() {
+    public static void start(Connection connection) {
 
         String item;
         while (true) {
@@ -11,7 +12,7 @@ public class Menu {
             System.out.println("0. Exit");
             item = input();
             switch (item) {
-                case "1" : queryMenu();
+                case "1" : queryMenu(connection);
                     break;
                 case "0" : exit();
                     break;
@@ -31,7 +32,7 @@ public class Menu {
         return scanner.nextLine();
     }
 
-    private static void queryMenu() {
+    private static void queryMenu(Connection connection) {
 
         String item;
         CompanyDaoImpl companies = new CompanyDaoImpl();
@@ -42,11 +43,11 @@ public class Menu {
             item = input();
             switch(item) {
                 case "1" :
-                    companies.getAllCompanies();
+                    companies.getAllCompanies(connection);
                     break;
                 case "2" :
                     System.out.println("Enter the company name:");
-                    companies.addCompany(input());
+                    companies.addCompany(connection, input());
                     break;
                 case "0" : return;
                 default :
