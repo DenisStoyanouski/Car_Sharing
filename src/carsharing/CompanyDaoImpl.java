@@ -29,6 +29,7 @@ public class CompanyDaoImpl implements CompanyDao {
                 if (!rs.isBeforeFirst()) {
                     System.out.println("The company list is empty!");
                 } else {
+                    System.out.println("Company list:");
                     while (rs.next()) {
                         int id = rs.getInt("id");
                         String name = rs.getString("name");

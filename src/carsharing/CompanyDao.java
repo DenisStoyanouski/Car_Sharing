@@ -1,8 +1,5 @@
 package carsharing;
 
-import java.sql.Connection;
-import java.util.List;
-
 public interface CompanyDao {
     public void getAllCompanies();
     public void getCompany(int rollNo);

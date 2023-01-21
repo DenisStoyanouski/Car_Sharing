@@ -12,7 +12,7 @@ class DataBase {
     // JDBC driver name and database URL
     private static final String JDBC_DRIVER = "org.h2.Driver";
     private final String databaseFileName;
-    private static final String DB_URL = String.format("jdbc:h2:.%1$ssrc%1$scarsharing%1$sdb%1$s", File.separator);
+    private static final String DB_URL = "jdbc:h2:." + File.separator + "src" + File.separator + "carsharing" + File.separator + "db" + File.separator;
 
 
     //  Database credentials
