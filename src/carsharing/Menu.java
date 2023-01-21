@@ -1,10 +1,20 @@
 package carsharing;
 
 import java.sql.Connection;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Menu {
-    public static void start(Connection connection) {
+    private Connection connection;
+
+    private CompanyDaoImpl companies;
+
+
+    public Menu(Connection connection) {
+        this.connection = connection;
+        companies = new CompanyDaoImpl(connection);
+    }
+    public void start() {
 
         String item;
         while (true) {
@@ -12,7 +22,7 @@ public class Menu {
             System.out.println("0. Exit");
             item = input();
             switch (item.trim()) {
-                case "1" : queryMenu(connection);
+                case "1" : queryMenu("company");
                     break;
                 case "0" : exit();
                     break;
@@ -31,26 +41,47 @@ public class Menu {
         return scanner.nextLine();
     }
 
-    private static void queryMenu(Connection connection) {
-
+    private void queryMenu(String name) {
         String item;
-        CompanyDaoImpl companies = new CompanyDaoImpl(connection);
         while (true) {
-            System.out.println("1. Company list");
-            System.out.println("2. Create a company");
+            System.out.println(String.format("1. %s list", name));
+            System.out.println(String.format("2. Create a %s", name));
             System.out.println("0. Back");
             item = input();
             switch(item.trim()) {
                 case "1" :
-                    companies.getAllCompanies();
+                    chooseCompany(name);
                     break;
                 case "2" :
-                    System.out.println("Enter the company name:");
-                    companies.addCompany(input());
+                    System.out.println(String.format("Enter the %s name:", name));
+                    companies.add(name, input());
                     break;
                 case "0" : return;
                 default :
                     System.out.println("Unknown query");
+            }
+        }
+    }
+
+    private void chooseCompany(String name) {
+        Map<Integer,String> select = companies.getAll(name);
+        if (select.isEmpty()) {
+            System.out.println(String.format("The %s list is empty!", name));
+        } else {
+            if ("company".equals(name)) {
+                System.out.println("Choose the company:");
+                select.forEach((key, val) -> System.out.println(key + ". " + val));
+                System.out.println("0. back");
+                String number = input();
+                if ("0".equals(number)) {
+                    return;
+                } else {
+                    String nextName = select.getOrDefault(Integer.parseInt(number), "0");
+                    System.out.println(String.format("'%s' company", nextName));
+                    queryMenu(nextName);
+                }
+            } else {
+                select.forEach((key, val) -> System.out.println(key + ". " + val));
             }
         }
     }

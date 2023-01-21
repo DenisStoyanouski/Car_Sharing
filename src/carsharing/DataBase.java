@@ -41,6 +41,7 @@ class DataBase {
         } catch (SQLException e) {
             System.out.println(e.getErrorCode());
         }
+        createTable();
         return conn;
     }
 

@@ -13,7 +13,6 @@ public class Main {
         }
         DataBase db = new DataBase(databaseFileName);
         Connection conn = db.getConnection();
-        db.createTable();
-        Menu.start(conn);
+        new Menu(conn).start();
     }
 }

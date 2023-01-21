@@ -1,65 +1,58 @@
 package carsharing;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CompanyDaoImpl implements CompanyDao {
 
-        //list is working as a database
         Connection conn;
 
         public CompanyDaoImpl(Connection conn){
             this.conn = conn;
         }
         @Override
-        public void deleteCompany(Company Company) {
+        public void delete(String tableName) {
 
-            System.out.println("Company: Roll No " + Company.getRollNo() + ", deleted from database");
+            System.out.println("Company: Roll No " + ", deleted from database");
         }
 
         //retrieve list of Companies from the database
         @Override
-        public void getAllCompanies() {
+        public Map<Integer, String> getAll(String tableName) {
+            Map<Integer, String> select = new HashMap<>();
             System.out.println();
+            String query = String.format("SELECT * FROM %s", tableName);
             try (Statement stmt = conn.createStatement()) {
-                String query = "SELECT * FROM COMPANY";
                 ResultSet rs = stmt.executeQuery(query);
-                if (!rs.isBeforeFirst()) {
-                    System.out.println("The company list is empty!");
-                } else {
-                    System.out.println("Company list:");
-                    while (rs.next()) {
-                        int id = rs.getInt("id");
-                        String name = rs.getString("name");
-                        System.out.println( id + ". " + name);
-                    }
-                    conn.commit();
+                while (rs.next()) {
+                    int id = rs.getInt("id");
+                    String name = rs.getString("name");
+                    select.put(id, name);
                 }
-                System.out.println();
-
+                conn.commit();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
+            return select;
         }
 
         @Override
-        public void getCompany(int rollNo) {
+        public void getById(String tableName, int id) {
             System.out.println();
         }
 
         @Override
-        public void updateCompany(Company Company) {
+        public void update(String tableName) {
 
-            System.out.println("Company: Roll No " + Company.getRollNo() + ", updated in the database");
+            System.out.println("Company: Roll No " + ", updated in the database");
         }
 
         @Override
-        public void addCompany(String name) {
+        public void add(String company, String name) {
             try (Statement stmt = conn.createStatement()) {
-                String query = String.format("INSERT INTO COMPANY (name) " +
-                        "VALUES ('%s')",name);
+                String query = String.format("INSERT INTO car (name) " +
+                        "VALUES ('%s')", company, name);
                 if (stmt.executeUpdate(query) != 0) {
                     System.out.println("The company was created!");
                 }
