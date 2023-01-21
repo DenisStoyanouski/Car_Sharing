@@ -48,9 +48,8 @@ class DataBase {
         System.out.println("Creating table in given database...");
         try (Statement stmt = conn.createStatement()) {
             String sql =  "CREATE TABLE IF NOT EXISTS COMPANY  " +
-                    "(id INTEGER AUTO_INCREMENT, " +
-                    " name VARCHAR(255) UNIQUE NOT NULL," +
-                    " PRIMARY KEY ( id ))";
+                    "(id INTEGER PRIMARY KEY AUTO_INCREMENT, " +
+                    " name VARCHAR(255) UNIQUE NOT NULL)";
             if (stmt.executeUpdate(sql) == 0) {
                 System.out.println("Created table in given database...");
             }

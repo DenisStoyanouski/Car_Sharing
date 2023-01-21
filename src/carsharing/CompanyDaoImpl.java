@@ -26,17 +26,17 @@ public class CompanyDaoImpl implements CompanyDao {
             try (Statement stmt = conn.createStatement()) {
                 String query = "SELECT * FROM COMPANY";
                 ResultSet rs = stmt.executeQuery(query);
-                if (rs.getRow() != 0) {
+                if (!rs.isBeforeFirst()) {
+                    System.out.println("The company list is empty!");
+                } else {
                     while (rs.next()) {
                         int id = rs.getInt("id");
                         String name = rs.getString("name");
-                        System.out.println(id + ". " + name);
+                        System.out.println( id + ". " + name);
                     }
                     conn.commit();
-                } else {
-                    System.out.println("The company list is empty!");
-                    System.out.println();
                 }
+                System.out.println();
 
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -56,7 +56,15 @@ public class CompanyDaoImpl implements CompanyDao {
 
         @Override
         public void addCompany(String name) {
-
-            System.out.println("The company was created!");
+            try (Statement stmt = conn.createStatement()) {
+                String query = String.format("INSERT INTO COMPANY (name) " +
+                        "VALUES ('%s')",name);
+                if (stmt.executeUpdate(query) != 0) {
+                    System.out.println("The company was created!");
+                }
+                conn.commit();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
     }
 }
