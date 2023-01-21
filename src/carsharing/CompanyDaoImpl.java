@@ -4,57 +4,59 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 
 public class CompanyDaoImpl implements CompanyDao {
 
         //list is working as a database
-        List<Company> Companies;
+        Connection conn;
 
-        public CompanyDaoImpl(){
-            Companies = new ArrayList<Company>();
+        public CompanyDaoImpl(Connection conn){
+            this.conn = conn;
         }
         @Override
-        public void deleteCompany(Connection conn, Company Company) {
-            Companies.remove(Company.getRollNo());
+        public void deleteCompany(Company Company) {
+
             System.out.println("Company: Roll No " + Company.getRollNo() + ", deleted from database");
         }
 
         //retrieve list of Companies from the database
         @Override
-        public void getAllCompanies(Connection conn) {
+        public void getAllCompanies() {
+            System.out.println();
             try (Statement stmt = conn.createStatement()) {
                 String query = "SELECT * FROM COMPANY";
                 ResultSet rs = stmt.executeQuery(query);
-                if (!rs.wasNull()) {
+                if (rs.getRow() != 0) {
                     while (rs.next()) {
                         int id = rs.getInt("id");
                         String name = rs.getString("name");
                         System.out.println(id + ". " + name);
                     }
+                    conn.commit();
                 } else {
                     System.out.println("The company list is empty!");
+                    System.out.println();
                 }
+
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         }
 
         @Override
-        public Company getCompany(Connection conn, int rollNo) {
-            return Companies.get(rollNo);
+        public void getCompany(int rollNo) {
+            System.out.println();
         }
 
         @Override
-        public void updateCompany(Connection conn, Company Company) {
-            Companies.get(Company.getRollNo()).setName(Company.getName());
+        public void updateCompany(Company Company) {
+
             System.out.println("Company: Roll No " + Company.getRollNo() + ", updated in the database");
         }
 
         @Override
-        public void addCompany(Connection conn, String name) {
-            Companies.add(new Company(name));
+        public void addCompany(String name) {
+
             System.out.println("The company was created!");
     }
 }

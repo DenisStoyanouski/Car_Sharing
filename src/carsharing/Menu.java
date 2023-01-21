@@ -11,7 +11,7 @@ public class Menu {
             System.out.println("1. Log in as a manager");
             System.out.println("0. Exit");
             item = input();
-            switch (item) {
+            switch (item.trim()) {
                 case "1" : queryMenu(connection);
                     break;
                 case "0" : exit();
@@ -20,7 +20,6 @@ public class Menu {
                     System.out.println("Unknown command");
             }
         }
-
     }
 
     private static void exit() {
@@ -35,19 +34,19 @@ public class Menu {
     private static void queryMenu(Connection connection) {
 
         String item;
-        CompanyDaoImpl companies = new CompanyDaoImpl();
+        CompanyDaoImpl companies = new CompanyDaoImpl(connection);
         while (true) {
             System.out.println("1. Company list");
             System.out.println("2. Create a company");
             System.out.println("0. Back");
             item = input();
-            switch(item) {
+            switch(item.trim()) {
                 case "1" :
-                    companies.getAllCompanies(connection);
+                    companies.getAllCompanies();
                     break;
                 case "2" :
                     System.out.println("Enter the company name:");
-                    companies.addCompany(connection, input());
+                    companies.addCompany(input());
                     break;
                 case "0" : return;
                 default :

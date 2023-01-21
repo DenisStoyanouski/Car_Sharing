@@ -47,7 +47,7 @@ class DataBase {
     public void createTable() {
         System.out.println("Creating table in given database...");
         try (Statement stmt = conn.createStatement()) {
-            String sql =  "CREATE TABLE COMPANY  " +
+            String sql =  "CREATE TABLE IF NOT EXISTS COMPANY  " +
                     "(id INTEGER AUTO_INCREMENT, " +
                     " name VARCHAR(255) UNIQUE NOT NULL," +
                     " PRIMARY KEY ( id ))";
