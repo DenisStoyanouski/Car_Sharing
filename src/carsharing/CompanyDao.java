@@ -1,12 +1,11 @@
 package carsharing;
 
-import java.util.List;
-import java.util.Map;
+import java.util.ArrayList;;
 
 public interface CompanyDao {
-    public List<String> getAll(String tableName);
-    public int getOne(String tableName, String name);
-    public void update(String tableName);
-    public void delete(String tableName);
-    public void add(String name);
+    public ArrayList<Company> getAllCompanies();
+    public Company getCompany(int rollNo);
+    public void updateCompany(Company company);
+    public void deleteCompany(Company Company);
+    public void addCompany(String name);
 }

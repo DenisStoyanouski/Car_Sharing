@@ -1,13 +1,12 @@
 package carsharing;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 
 public class Main {
 
     private static String databaseFileName = "carsharing";
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) {
         if (args.length == 2) {
             databaseFileName = args[1];
         }

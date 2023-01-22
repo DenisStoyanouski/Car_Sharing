@@ -40,39 +40,6 @@ class DataBase {
         } catch (SQLException e) {
             System.out.println(e.getErrorCode());
         }
-        createTable();
         return conn;
-    }
-
-    public void createTable() {
-        try (Statement stmt = conn.createStatement()) {
-            conn.setAutoCommit(true);
-            String createCompanyTable =  "CREATE TABLE IF NOT EXISTS COMPANY  " +
-                    "(id INTEGER PRIMARY KEY AUTO_INCREMENT, " +
-                    " name VARCHAR(255) UNIQUE NOT NULL)";
-            if (stmt.executeUpdate(createCompanyTable) == 0) {
-                conn.commit();
-            } else {
-                conn.rollback();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        try (Statement stmt = conn.createStatement()) {
-            conn.setAutoCommit(true);
-            String createTableCar =  "CREATE TABLE IF NOT EXISTS CAR  " +
-                    "(id INTEGER PRIMARY KEY AUTO_INCREMENT, " +
-                    "name VARCHAR(255) UNIQUE NOT NULL," +
-                    "company_id INTEGER NOT NULL," +
-                    "FOREIGN KEY (company_id) REFERENCES COMPANY(id))";
-            if (stmt.executeUpdate(createTableCar) == 0) {
-                conn.commit();
-            } else {
-                conn.rollback();
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

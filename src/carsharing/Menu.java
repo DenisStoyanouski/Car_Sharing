@@ -7,12 +7,16 @@ import java.util.Scanner;
 public class Menu {
     private Connection connection;
 
-    private CompanyDaoImpl companies;
+    private CompanyDaoImpl tableCompanies;
+
+    private CarDaoImpl tableCars;
+
 
 
     public Menu(Connection connection) {
         this.connection = connection;
-        companies = new CompanyDaoImpl(connection);
+        tableCompanies = new CompanyDaoImpl(connection);
+        tableCars = new CarDaoImpl(connection);
     }
     public void start() {
 
@@ -22,7 +26,7 @@ public class Menu {
             System.out.println("0. Exit");
             item = input();
             switch (item.trim()) {
-                case "1" : queryMenu("company");
+                case "1" : loginManager();
                     break;
                 case "0" : exit();
                     break;
@@ -41,7 +45,7 @@ public class Menu {
         return scanner.nextLine();
     }
 
-    private void queryMenu(String name) {
+    private void loginManager() {
         String item;
         while (true) {
             System.out.printf("1. Company list%n");
@@ -50,11 +54,11 @@ public class Menu {
             item = input();
             switch(item.trim()) {
                 case "1" :
-                    chooseCompany(name);
+                    chooseCompany();
                     break;
                 case "2" :
-                    System.out.println(String.format("Enter the %s name:", name));
-                    companies.add(input());
+                    System.out.println("Enter the company name:");
+                    tableCompanies.addCompany(input());
                     break;
                 case "0" : return;
                 default :
@@ -63,14 +67,15 @@ public class Menu {
         }
     }
 
-    private void chooseCompany(String name) {
+    private void chooseCompany() {
+        ArrayList<Company> select = tableCompanies.companies;
         System.out.print("Choose the company:");
-        ArrayList<String> select = companies.getAll(name);
+
         if (select.isEmpty()) {
-            System.out.printf("The %s list is empty!%n", name);
+            System.out.printf("The companies list is empty!%n");
             return;
         } else {
-            select.forEach((x) -> System.out.println((select.indexOf(x) + 1) + ". " + x));
+            select.forEach((x) -> System.out.println(x.getRollNo() + ". " + x.getName()));
             System.out.println("0. Back");
         }
         int choice = -1;
@@ -83,7 +88,7 @@ public class Menu {
                     System.out.println("Unknown item");
                 } else {
                     System.out.printf("'%s' company%n", select.get(choice - 1));
-                    useTableCar(choice, "car");
+                    useTableCar(choice);
                     return;
                 }
             } catch (NumberFormatException e) {
@@ -92,7 +97,7 @@ public class Menu {
         }
     }
 
-    private void useTableCar(int choice, String tableName) {
+    private void useTableCar(int choice) {
         String item = null;
         while( !"0".equals(item)) {
             System.out.printf("1. Car list%n");
@@ -100,18 +105,18 @@ public class Menu {
             System.out.println("0. Back");
             item = input().trim();
             switch(item) {
-                case "1" : ArrayList<String> select = companies.getAll(tableName, choice);
+                case "1" : ArrayList<Car> select = tableCars.getAllCars(choice);
                             if (!select.isEmpty()) {
                                 System.out.println("Car list:");
-                                select.forEach((x) -> System.out.println((select.indexOf(x) + 1) + ". " + x));
+                                select.forEach((x) -> System.out.println((x.getRollNo()) + ". " + x.getName()));
                                 System.out.println();
                             } else {
-                                System.out.printf("The %s list is empty!%n", tableName);
+                                System.out.printf("The cars list is empty!%n");
                             }
                         break;
                 case "2" : System.out.println("Enter the car name:");
                             String carName = input().trim();
-                            companies.add(carName, choice);
+                            tableCars.addCar(carName, choice);
                             break;
                 case "0" : return;
                 default :
