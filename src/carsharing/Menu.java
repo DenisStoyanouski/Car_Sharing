@@ -44,8 +44,8 @@ public class Menu {
     private void queryMenu(String name) {
         String item;
         while (true) {
-            System.out.println(String.format("1. %s list", name));
-            System.out.println(String.format("2. Create a %s", name));
+            System.out.printf("1. %s list%n", name);
+            System.out.printf("2. Create a %s%n", name);
             System.out.println("0. Back");
             item = input();
             switch(item.trim()) {
@@ -54,7 +54,7 @@ public class Menu {
                     break;
                 case "2" :
                     System.out.println(String.format("Enter the %s name:", name));
-                    companies.add(name, input());
+                    companies.add(input());
                     break;
                 case "0" : return;
                 default :
@@ -64,25 +64,48 @@ public class Menu {
     }
 
     private void chooseCompany(String name) {
+
         Map<Integer,String> select = companies.getAll(name);
         if (select.isEmpty()) {
-            System.out.println(String.format("The %s list is empty!", name));
+            System.out.printf("The %s list is empty!%n", name);
+            return;
         } else {
-            if ("company".equals(name)) {
-                System.out.println("Choose the company:");
-                select.forEach((key, val) -> System.out.println(key + ". " + val));
-                System.out.println("0. back");
-                String number = input();
-                if ("0".equals(number)) {
-                    return;
-                } else {
-                    String nextName = select.getOrDefault(Integer.parseInt(number), "0");
-                    System.out.println(String.format("'%s' company", nextName));
-                    queryMenu(nextName);
-                }
+            select.forEach((key, val) -> System.out.println(key + ". " + val));
+            System.out.println("0. back");
+        }
+        int choice = -1;
+        while(choice != 0) {
+            choice = Integer.parseInt(input().trim());
+            if (choice == 0) {
+                return;
+            } else if (select.get(choice) == null) {
+                System.out.println("Unknown item");
             } else {
-                select.forEach((key, val) -> System.out.println(key + ". " + val));
+                System.out.printf("'%s' company%n", select.get(choice));
+                useTableCar(choice, "car");
             }
         }
+
+    }
+
+    private void useTableCar(int choice, String tableName) {
+        System.out.printf("1. %s list%n", tableName);
+        System.out.printf("2. Create a %s%n", tableName);
+        System.out.println("0. Back");
+        int item = -1;
+        while(item != 0) {
+            item = Integer.parseInt(input().trim());
+            switch(item) {
+                case 1 : companies.getAll(tableName).forEach((key, val) -> System.out.println(key + ". " + val));
+                break;
+                case 2 : companies.add(tableName, choice);
+                break;
+                case 0 : return;
+                default :
+                    System.out.println("");
+            }
+        }
+
+
     }
 }
