@@ -1,7 +1,9 @@
 package carsharing;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CompanyDaoImpl implements CompanyDao {
@@ -11,16 +13,11 @@ public class CompanyDaoImpl implements CompanyDao {
     public CompanyDaoImpl(Connection conn){
         this.conn = conn;
     }
-    @Override
-    public void delete(String tableName) {
-
-        System.out.println("Company: Roll No " + ", deleted from database");
-    }
 
     //retrieve list of Companies from the database
     @Override
-    public Map<Integer, String> getAll(String tableName) {
-        Map<Integer, String> select = new HashMap<>();
+    public ArrayList<String> getAll(String tableName) {
+        ArrayList<String> select = new ArrayList<>();
         System.out.println();
         String query = String.format("SELECT * FROM %s", tableName);
         try (Statement stmt = conn.createStatement()) {
@@ -28,7 +25,7 @@ public class CompanyDaoImpl implements CompanyDao {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String name = rs.getString("name");
-                select.put(id, name);
+                select.add(name);
             }
             conn.commit();
         } catch (SQLException e) {
@@ -37,8 +34,8 @@ public class CompanyDaoImpl implements CompanyDao {
         return select;
     }
 
-    public Map<Integer, String> getAll(String tableName, int company_id) {
-        Map<Integer, String> select = new HashMap<>();
+    public ArrayList<String> getAll(String tableName, int company_id) {
+        ArrayList<String> select = new ArrayList<>();
         System.out.println();
         String query = String.format("SELECT * FROM %s where company_id = %d", tableName, company_id);
         try (Statement stmt = conn.createStatement()) {
@@ -47,7 +44,7 @@ public class CompanyDaoImpl implements CompanyDao {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String name = rs.getString("name");
-                select.put(id, name);
+                select.add(name);
             }
             conn.commit();
         } catch (SQLException e) {
@@ -57,14 +54,30 @@ public class CompanyDaoImpl implements CompanyDao {
     }
 
     @Override
-    public void getById(String tableName, int id) {
-        System.out.println();
+    public int getOne(String tableName, String name) {
+        int id = 0;
+        String query = String.format("SELECT * FROM %s where name = %s", tableName, name);
+        try (Statement stmt = conn.createStatement()) {
+            conn.setAutoCommit(true);
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                id = rs.getInt(id);
+            }
+            conn.commit();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return id;
     }
 
     @Override
     public void update(String tableName) {
 
-        System.out.println("Company: Roll No " + ", updated in the database");
+    }
+
+    @Override
+    public void delete(String tableName) {
+
     }
 
     @Override

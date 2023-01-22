@@ -1,7 +1,7 @@
 package carsharing;
 
 import java.sql.Connection;
-import java.util.Map;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Menu {
@@ -65,12 +65,12 @@ public class Menu {
 
     private void chooseCompany(String name) {
         System.out.print("Choose the company:");
-        Map<Integer,String> select = companies.getAll(name);
+        ArrayList<String> select = companies.getAll(name);
         if (select.isEmpty()) {
             System.out.printf("The %s list is empty!%n", name);
             return;
         } else {
-            select.forEach((key, val) -> System.out.println(key + ". " + val));
+            select.forEach((x) -> System.out.println((select.indexOf(x) + 1) + ". " + x));
             System.out.println("0. Back");
         }
         int choice = -1;
@@ -79,10 +79,10 @@ public class Menu {
                 choice = Integer.parseInt(input().trim());
                 if (choice == 0) {
                     return;
-                } else if (select.get(choice) == null) {
+                } else if (select.get(choice - 1) == null) {
                     System.out.println("Unknown item");
                 } else {
-                    System.out.printf("'%s' company%n", select.get(choice));
+                    System.out.printf("'%s' company%n", select.get(choice - 1));
                     useTableCar(choice, "car");
                     return;
                 }
@@ -100,10 +100,10 @@ public class Menu {
             System.out.println("0. Back");
             item = input().trim();
             switch(item) {
-                case "1" : Map<Integer,String> select = companies.getAll(tableName, choice);
+                case "1" : ArrayList<String> select = companies.getAll(tableName, choice);
                             if (!select.isEmpty()) {
                                 System.out.println("Car list:");
-                                select.forEach((key, val) -> System.out.println(key + ". " + val));
+                                select.forEach((x) -> System.out.println((select.indexOf(x) + 1) + ". " + x));
                                 System.out.println();
                             } else {
                                 System.out.printf("The %s list is empty!%n", tableName);
