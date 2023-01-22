@@ -14,6 +14,7 @@ class CarDaoImpl implements CarDao{
     public CarDaoImpl(Connection conn){
         this.conn = conn;
         this.cars = new ArrayList<>();
+        createTable();
     }
 
     private void createTable() {

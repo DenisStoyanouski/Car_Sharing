@@ -12,6 +12,7 @@ public class CompanyDaoImpl implements CompanyDao {
     public CompanyDaoImpl(Connection conn){
         this.conn = conn;
         this.companies = new ArrayList<>();
+        createTable();
     }
 
     private void createTable() {
