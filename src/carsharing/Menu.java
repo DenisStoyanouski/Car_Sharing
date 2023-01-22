@@ -75,37 +75,44 @@ public class Menu {
         }
         int choice = -1;
         while(choice != 0) {
-            choice = Integer.parseInt(input().trim());
-            if (choice == 0) {
-                return;
-            } else if (select.get(choice) == null) {
+            try {
+                choice = Integer.parseInt(input().trim());
+                if (choice == 0) {
+                    return;
+                } else if (select.get(choice) == null) {
+                    System.out.println("Unknown item");
+                } else {
+                    System.out.printf("'%s' company%n", select.get(choice));
+                    useTableCar(choice, "car");
+                }
+            } catch (NumberFormatException e) {
                 System.out.println("Unknown item");
-            } else {
-                System.out.printf("'%s' company%n", select.get(choice));
-                useTableCar(choice, "car");
             }
         }
-
     }
 
     private void useTableCar(int choice, String tableName) {
         System.out.printf("1. %s list%n", tableName);
         System.out.printf("2. Create a %s%n", tableName);
         System.out.println("0. Back");
-        int item = -1;
-        while(item != 0) {
-            item = Integer.parseInt(input().trim());
+        String item = null;
+        while( !"0".equals(item)) {
+            item = input().trim();
             switch(item) {
-                case 1 : companies.getAll(tableName).forEach((key, val) -> System.out.println(key + ". " + val));
-                break;
-                case 2 : companies.add(tableName, choice);
-                break;
-                case 0 : return;
+                case "1" : Map<Integer,String> select = companies.getAll(tableName);
+                            if (!select.isEmpty()) {
+                                select.forEach((key, val) -> System.out.println(key + ". " + val));
+                            } else {
+                                System.out.printf("The %s list is empty!%n", tableName);
+                            }
+                    break;
+                case "2" :
+                    companies.add(tableName, choice);
+                    break;
+                case "0" : return;
                 default :
-                    System.out.println("");
+                    System.out.println("Unknown item");
             }
         }
-
-
     }
 }
