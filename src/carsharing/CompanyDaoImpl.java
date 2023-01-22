@@ -34,6 +34,7 @@ public class CompanyDaoImpl implements CompanyDao {
     //retrieve list of Companies from the database
     @Override
     public ArrayList<Company> getAllCompanies() {
+        companies.clear();
         System.out.println();
         String query = "SELECT * FROM COMPANY";
         try (Statement stmt = conn.createStatement()) {
@@ -53,7 +54,7 @@ public class CompanyDaoImpl implements CompanyDao {
     @Override
     public Company getCompany(int rollNo) {
         Company company = null;
-        String query = "SELECT * FROM COMPANY where id = %s".formatted(rollNo);
+        String query = String.format("SELECT * FROM COMPANY where id = %s", rollNo);
         try (Statement stmt = conn.createStatement()) {
             conn.setAutoCommit(true);
             ResultSet rs = stmt.executeQuery(query);
@@ -82,8 +83,8 @@ public class CompanyDaoImpl implements CompanyDao {
     @Override
     public void addCompany(String nameCompany) {
         try (Statement stmt = conn.createStatement()) {
-            String query = "INSERT INTO Company (name) " +
-                    "VALUES ('%s')".formatted(nameCompany);
+            String query = String.format("INSERT INTO Company (name) " +
+                    "VALUES ('%s')", nameCompany);
             if (stmt.executeUpdate(query) != 0) {
                 System.out.printf("The %s was created!%n%n", "company");
             }

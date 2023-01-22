@@ -68,9 +68,9 @@ public class Menu {
     }
 
     private void chooseCompany() {
+        tableCompanies.getAllCompanies();
         ArrayList<Company> select = tableCompanies.companies;
-        System.out.print("Choose the company:");
-
+        System.out.println("Choose the company:");
         if (select.isEmpty()) {
             System.out.printf("The companies list is empty!%n");
             return;
@@ -87,7 +87,7 @@ public class Menu {
                 } else if (select.get(choice - 1) == null) {
                     System.out.println("Unknown item");
                 } else {
-                    System.out.printf("'%s' company%n", select.get(choice - 1));
+                    System.out.printf("'%s' company%n", select.get(choice - 1).getName());
                     useTableCar(choice);
                     return;
                 }
@@ -105,10 +105,11 @@ public class Menu {
             System.out.println("0. Back");
             item = input().trim();
             switch(item) {
-                case "1" : ArrayList<Car> select = tableCars.getAllCars(choice);
+                case "1" : tableCars.getAllCars(choice);
+                            ArrayList<Car> select = tableCars.cars;
                             if (!select.isEmpty()) {
                                 System.out.println("Car list:");
-                                select.forEach((x) -> System.out.println((x.getRollNo()) + ". " + x.getName()));
+                                select.forEach((x) -> System.out.println((select.indexOf(x) + 1) + ". " + x.getName()));
                                 System.out.println();
                             } else {
                                 System.out.printf("The cars list is empty!%n");

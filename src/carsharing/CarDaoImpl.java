@@ -37,8 +37,9 @@ class CarDaoImpl implements CarDao{
 
     @Override
     public ArrayList<Car> getAllCars(int companyId) {
+        cars.clear();
         System.out.println();
-        String query = "SELECT * FROM CAR where company_id = %d".formatted(companyId);
+        String query = String.format("SELECT * FROM CAR where company_id = %d",companyId);
         try (Statement stmt = conn.createStatement()) {
             conn.setAutoCommit(true);
             ResultSet rs = stmt.executeQuery(query);
