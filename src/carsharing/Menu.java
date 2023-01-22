@@ -64,7 +64,7 @@ public class Menu {
     }
 
     private void chooseCompany(String name) {
-
+        System.out.println("Choose the company:");
         Map<Integer,String> select = companies.getAll(name);
         if (select.isEmpty()) {
             System.out.printf("The %s list is empty!%n", name);
@@ -84,6 +84,7 @@ public class Menu {
                 } else {
                     System.out.printf("'%s' company%n", select.get(choice));
                     useTableCar(choice, "car");
+                    return;
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Unknown item");
@@ -92,23 +93,25 @@ public class Menu {
     }
 
     private void useTableCar(int choice, String tableName) {
-        System.out.printf("1. %s list%n", tableName);
-        System.out.printf("2. Create a %s%n", tableName);
-        System.out.println("0. Back");
         String item = null;
         while( !"0".equals(item)) {
+            System.out.printf("1. %s list%n", tableName);
+            System.out.printf("2. Create a %s%n", tableName);
+            System.out.println("0. Back");
             item = input().trim();
             switch(item) {
-                case "1" : Map<Integer,String> select = companies.getAll(tableName);
+                case "1" : Map<Integer,String> select = companies.getAll(tableName, choice);
                             if (!select.isEmpty()) {
                                 select.forEach((key, val) -> System.out.println(key + ". " + val));
+                                System.out.println();
                             } else {
                                 System.out.printf("The %s list is empty!%n", tableName);
                             }
-                    break;
-                case "2" :
-                    companies.add(tableName, choice);
-                    break;
+                        break;
+                case "2" : System.out.println("Enter the car name:");
+                            String carName = input().trim();
+                            companies.add(carName, choice);
+                            break;
                 case "0" : return;
                 default :
                     System.out.println("Unknown item");

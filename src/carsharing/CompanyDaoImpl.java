@@ -37,6 +37,24 @@ public class CompanyDaoImpl implements CompanyDao {
         return select;
     }
 
+    public Map<Integer, String> getAll(String tableName, int company_id) {
+        Map<Integer, String> select = new HashMap<>();
+        System.out.println();
+        String query = String.format("SELECT * FROM %s where company_id = %d", tableName, company_id);
+        try (Statement stmt = conn.createStatement()) {
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                select.put(id, name);
+            }
+            conn.commit();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return select;
+    }
+
     @Override
     public void getById(String tableName, int id) {
         System.out.println();
@@ -54,19 +72,19 @@ public class CompanyDaoImpl implements CompanyDao {
             String query = String.format("INSERT INTO Company (name) " +
                     "VALUES ('%s')", name);
             if (stmt.executeUpdate(query) != 0) {
-                System.out.printf("The %s was created!%n", name);
+                System.out.printf("The %s was created!%n", "company");
             }
             conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-    public void add(String name, int company_id) {
+    public void add(String carName, int company_id) {
         try (Statement stmt = conn.createStatement()) {
             String query = String.format("INSERT INTO car (name, company_id) " +
-                    "VALUES ('%s', %d)", name, company_id);
+                    "VALUES ('%s', %d)", carName, company_id);
             if (stmt.executeUpdate(query) != 0) {
-                System.out.printf("The %s was created!%n", name);
+                System.out.println("The car was added!");
             }
             conn.commit();
         } catch (SQLException e) {
