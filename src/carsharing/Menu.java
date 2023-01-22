@@ -44,8 +44,8 @@ public class Menu {
     private void queryMenu(String name) {
         String item;
         while (true) {
-            System.out.printf("1. %s list%n", name);
-            System.out.printf("2. Create a %s%n", name);
+            System.out.printf("1. Company list%n");
+            System.out.printf("2. Create a company%n");
             System.out.println("0. Back");
             item = input();
             switch(item.trim()) {
@@ -64,14 +64,14 @@ public class Menu {
     }
 
     private void chooseCompany(String name) {
-        System.out.println("Choose the company:");
+        System.out.print("Choose the company:");
         Map<Integer,String> select = companies.getAll(name);
         if (select.isEmpty()) {
             System.out.printf("The %s list is empty!%n", name);
             return;
         } else {
             select.forEach((key, val) -> System.out.println(key + ". " + val));
-            System.out.println("0. back");
+            System.out.println("0. Back");
         }
         int choice = -1;
         while(choice != 0) {
@@ -95,13 +95,14 @@ public class Menu {
     private void useTableCar(int choice, String tableName) {
         String item = null;
         while( !"0".equals(item)) {
-            System.out.printf("1. %s list%n", tableName);
-            System.out.printf("2. Create a %s%n", tableName);
+            System.out.printf("1. Car list%n");
+            System.out.printf("2. Create a car%n");
             System.out.println("0. Back");
             item = input().trim();
             switch(item) {
                 case "1" : Map<Integer,String> select = companies.getAll(tableName, choice);
                             if (!select.isEmpty()) {
+                                System.out.println("Car list:");
                                 select.forEach((key, val) -> System.out.println(key + ". " + val));
                                 System.out.println();
                             } else {

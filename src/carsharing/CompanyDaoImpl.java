@@ -32,7 +32,7 @@ public class CompanyDaoImpl implements CompanyDao {
             }
             conn.commit();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage());
         }
         return select;
     }
@@ -42,6 +42,7 @@ public class CompanyDaoImpl implements CompanyDao {
         System.out.println();
         String query = String.format("SELECT * FROM %s where company_id = %d", tableName, company_id);
         try (Statement stmt = conn.createStatement()) {
+            conn.setAutoCommit(true);
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
                 int id = rs.getInt("id");
@@ -50,7 +51,7 @@ public class CompanyDaoImpl implements CompanyDao {
             }
             conn.commit();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage());
         }
         return select;
     }
@@ -72,7 +73,7 @@ public class CompanyDaoImpl implements CompanyDao {
             String query = String.format("INSERT INTO Company (name) " +
                     "VALUES ('%s')", name);
             if (stmt.executeUpdate(query) != 0) {
-                System.out.printf("The %s was created!%n", "company");
+                System.out.printf("The %s was created!%n%n", "company");
             }
             conn.commit();
         } catch (SQLException e) {
@@ -84,7 +85,7 @@ public class CompanyDaoImpl implements CompanyDao {
             String query = String.format("INSERT INTO car (name, company_id) " +
                     "VALUES ('%s', %d)", carName, company_id);
             if (stmt.executeUpdate(query) != 0) {
-                System.out.println("The car was added!");
+                System.out.printf("The car was added!%n%n");
             }
             conn.commit();
         } catch (SQLException e) {

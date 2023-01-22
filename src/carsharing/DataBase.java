@@ -35,7 +35,6 @@ class DataBase {
         System.out.println("Connecting to database...");
         try {
             conn = DriverManager.getConnection(DB_URL + databaseFileName);
-            conn.setAutoCommit(true);
             System.out.println("Connected to database!");
 
         } catch (SQLException e) {
@@ -46,30 +45,32 @@ class DataBase {
     }
 
     public void createTable() {
-        System.out.println("Creating table COMPANY...");
         try (Statement stmt = conn.createStatement()) {
-            String sql =  "CREATE TABLE IF NOT EXISTS COMPANY  " +
+            conn.setAutoCommit(true);
+            String createCompanyTable =  "CREATE TABLE IF NOT EXISTS COMPANY  " +
                     "(id INTEGER PRIMARY KEY AUTO_INCREMENT, " +
                     " name VARCHAR(255) UNIQUE NOT NULL)";
-            if (stmt.executeUpdate(sql) == 0) {
-                System.out.println("Created table COMPANY in given database...");
+            if (stmt.executeUpdate(createCompanyTable) == 0) {
+                conn.commit();
+            } else {
+                conn.rollback();
             }
-            conn.commit();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
-        System.out.println("Creating table CAR...");
         try (Statement stmt = conn.createStatement()) {
-            String sql =  "CREATE TABLE IF NOT EXISTS CAR  " +
+            conn.setAutoCommit(true);
+            String createTableCar =  "CREATE TABLE IF NOT EXISTS CAR  " +
                     "(id INTEGER PRIMARY KEY AUTO_INCREMENT, " +
                     "name VARCHAR(255) UNIQUE NOT NULL," +
                     "company_id INTEGER NOT NULL," +
                     "FOREIGN KEY (company_id) REFERENCES COMPANY(id))";
-            if (stmt.executeUpdate(sql) == 0) {
-                System.out.println("Created table CAR in given database...");
+            if (stmt.executeUpdate(createTableCar) == 0) {
+                conn.commit();
+            } else {
+                conn.rollback();
             }
-            conn.commit();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
