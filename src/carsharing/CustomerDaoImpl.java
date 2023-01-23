@@ -56,7 +56,17 @@ public class CustomerDaoImpl implements CustomerDao{
     }
 
     @Override
-    public void addCustomer(String name) {
+    public void addCustomer(String nameCustomer) {
+        try (Statement stmt = conn.createStatement()) {
+            String query = String.format("INSERT INTO CUSTOMER (name) " +
+                    "VALUES ('%s')", nameCustomer);
+            if (stmt.executeUpdate(query) != 0) {
+                System.out.printf("The %s was created!%n%n", "customer");
+            }
+            conn.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 }
