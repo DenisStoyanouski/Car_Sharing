@@ -110,6 +110,13 @@ public class Menu {
         String item = input();
         switch(item.trim()) {
             case "0" : return;
+            case "1" :
+                tableCompanies.showCompanies();
+                if (customer.getRentedCarId() != 0) {
+                    System.out.println("You've already rented a car!");
+                } else {
+
+                }
             case "2" :
                 if (customer.getRentedCarId() == 0) {
                     System.out.println("You didn't rent a car!");
@@ -141,25 +148,17 @@ public class Menu {
 
     private void chooseCompany() {
         tableCompanies.getAllCompanies();
-        ArrayList<Company> select = tableCompanies.companies;
-        System.out.println("Choose the company:");
-        if (select.isEmpty()) {
-            System.out.printf("The companies list is empty!%n");
-            return;
-        } else {
-            select.forEach((x) -> System.out.println(x.getRollNo() + ". " + x.getName()));
-            System.out.println("0. Back");
-        }
+        tableCompanies.showCompanies();
         int choice = -1;
         while(choice != 0) {
             try {
                 choice = Integer.parseInt(input().trim());
                 if (choice == 0) {
                     return;
-                } else if (select.get(choice - 1) == null) {
+                } else if (tableCompanies.companies.get(choice - 1) == null) {
                     System.out.println("Unknown item");
                 } else {
-                    System.out.printf("'%s' company%n", select.get(choice - 1).getName());
+                    System.out.printf("'%s' company%n", tableCompanies.companies.get(choice - 1).getName());
                     useTableCar(choice);
                     return;
                 }
@@ -177,16 +176,10 @@ public class Menu {
             System.out.println("0. Back");
             item = input().trim();
             switch(item) {
-                case "1" : tableCars.getAllCars(choice);
-                            ArrayList<Car> select = tableCars.cars;
-                            if (!select.isEmpty()) {
-                                System.out.println("Car list:");
-                                select.forEach((x) -> System.out.println((select.indexOf(x) + 1) + ". " + x.getName()));
-                                System.out.println();
-                            } else {
-                                System.out.printf("The cars list is empty!%n");
-                            }
-                            break;
+                case "1" :
+                    tableCars.getAllCars(choice);
+                    tableCars.showCars();
+                    break;
                 case "2" : System.out.println("Enter the car name:");
                             String carName = input().trim();
                             tableCars.addCar(carName, choice);

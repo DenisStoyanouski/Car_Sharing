@@ -84,4 +84,15 @@ class CarDaoImpl implements CarDao{
             e.printStackTrace();
         }
     }
+
+    public void showCars() {
+        if (cars.isEmpty()) {
+            System.out.println("The cars list is empty!");
+        } else {
+            System.out.println("Car list:");
+            cars.forEach(x-> System.out.println((cars.indexOf(x) + 1) + ". " + x.getName()));
+            System.out.println();
+        }
+
+    }
 }
