@@ -11,22 +11,31 @@ public class Menu {
 
     private CarDaoImpl tableCars;
 
+    private CustomerDaoImpl tableCustomers;
+
 
 
     public Menu(Connection connection) {
         this.connection = connection;
         tableCompanies = new CompanyDaoImpl(connection);
         tableCars = new CarDaoImpl(connection);
+        tableCustomers = new CustomerDaoImpl(connection);
     }
-    public void start() {
+    public void startMainMenu() {
 
         String item;
         while (true) {
             System.out.println("1. Log in as a manager");
+            System.out.println("2. Log in as a customer");
+            System.out.println("3. Create a customer");
             System.out.println("0. Exit");
             item = input();
             switch (item.trim()) {
                 case "1" : loginManager();
+                    break;
+                case "2" : //loginCustomer();
+                    break;
+                case "3" : createCustomer();
                     break;
                 case "0" : exit();
                     break;
@@ -43,6 +52,11 @@ public class Menu {
     private static String input() {
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
+    }
+
+    private void createCustomer() {
+        System.out.println("Enter the customer name:");
+        tableCustomers.addCustomer(input());
     }
 
     private void loginManager() {

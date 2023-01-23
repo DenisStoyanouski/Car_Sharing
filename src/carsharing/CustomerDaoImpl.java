@@ -23,7 +23,7 @@ public class CustomerDaoImpl implements CustomerDao{
             String createCompanyTable =  "CREATE TABLE IF NOT EXISTS CUSTOMER  " +
                     "(id INTEGER PRIMARY KEY AUTO_INCREMENT, " +
                     " name VARCHAR(255) UNIQUE NOT NULL," +
-                    " rented_car_id INTEGER," +
+                    " rented_car_id INTEGER DEFAULT NULL" +
                     " FOREIGN KEY (rented_car_id) REFERENCES CAR(id)))";
             if (stmt.executeUpdate(createCompanyTable) == 0) {
                 conn.commit();
@@ -56,7 +56,7 @@ public class CustomerDaoImpl implements CustomerDao{
     }
 
     @Override
-    public void addCustomer(String name, int rentedCarId) {
+    public void addCustomer(String name) {
 
     }
 }

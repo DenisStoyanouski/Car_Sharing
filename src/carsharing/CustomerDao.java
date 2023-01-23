@@ -7,5 +7,5 @@ public interface CustomerDao {
     public Customer getCustomer(int rollNo);
     public void updateCustomer(Customer customer);
     public void deleteCustomer(Customer customer);
-    public void addCustomer(String name, int rentedCarId);
+    public void addCustomer(String name);
 }

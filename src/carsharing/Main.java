@@ -12,6 +12,6 @@ public class Main {
         }
         DataBase db = new DataBase(databaseFileName);
         Connection conn = db.getConnection();
-        new Menu(conn).start();
+        new Menu(conn).startMainMenu();
     }
 }
