@@ -55,8 +55,8 @@ public class Menu {
     }
 
     private void loginManager() {
-        String item;
-        while (true) {
+        String item = null;
+        while (!"0".equals(item)) {
             System.out.printf("1. Company list%n");
             System.out.printf("2. Create a company%n");
             System.out.println("0. Back");
@@ -78,19 +78,21 @@ public class Menu {
 
     private void loginCustomer() {
         ArrayList<Customer> select = tableCustomers.getAllCustomer();
+        String customerNumber = null;
         if (select.isEmpty()) {
             System.out.printf("The customers list is empty!%n");
         } else {
-            while (true) {
+            while (!"0".equals(customerNumber)) {
                 System.out.println("Choose a customer:");
-                select.forEach(x -> System.out.println(select.indexOf(x) + ". " + x.getName()));
+                select.forEach(x -> System.out.println((select.indexOf(x) + 1) + ". " + x.getName()));
                 System.out.println("0. Back");
                 try {
-                    int customer = Integer.parseInt(input());
-                    if (customer == 0) {
+                    customerNumber = input();
+                    int cN = Integer.parseInt(customerNumber);
+                    if (cN == 0) {
                         return;
                     } else {
-                        getCustomerMenu(select.get(customer));
+                        getCustomerMenu(select.get(cN - 1));
                         break;
                     }
                 } catch (NumberFormatException|IndexOutOfBoundsException e) {
@@ -107,6 +109,7 @@ public class Menu {
         System.out.println("0. Back");
         String item = input();
         switch(item.trim()) {
+            case "0" : return;
             case "2" :
                 if (customer.getRentedCarId() == 0) {
                     System.out.println("You didn't rent a car!");
@@ -114,6 +117,7 @@ public class Menu {
                     customer.setRentedCarId(0);
                     tableCustomers.updateCustomer(customer);
                 }
+                break;
             case "3" : if (customer.getRentedCarId() == 0 ) {
                     System.out.println("You didn't rent a car!");
                 } else {
@@ -125,6 +129,8 @@ public class Menu {
                     System.out.println(company.getName());
                 }
                 break;
+            default:
+                System.out.println("Unknown item");
         }
     }
 
@@ -180,7 +186,7 @@ public class Menu {
                             } else {
                                 System.out.printf("The cars list is empty!%n");
                             }
-                        break;
+                            break;
                 case "2" : System.out.println("Enter the car name:");
                             String carName = input().trim();
                             tableCars.addCar(carName, choice);

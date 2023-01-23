@@ -24,8 +24,8 @@ public class CustomerDaoImpl implements CustomerDao{
             String createCompanyTable =  "CREATE TABLE IF NOT EXISTS CUSTOMER  " +
                     "(id INTEGER PRIMARY KEY AUTO_INCREMENT, " +
                     " name VARCHAR(255) UNIQUE NOT NULL," +
-                    " rented_car_id INTEGER DEFAULT NULL" +
-                    " FOREIGN KEY (rented_car_id) REFERENCES CAR(id)))";
+                    " rented_car_id INTEGER DEFAULT NULL," +
+                    " FOREIGN KEY (rented_car_id) REFERENCES CAR(id))";
             if (stmt.executeUpdate(createCompanyTable) == 0) {
                 conn.commit();
             } else {
