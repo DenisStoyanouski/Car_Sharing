@@ -45,7 +45,10 @@ public class CustomerDaoImpl implements CustomerDao{
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
                 String name = rs.getString("name");
-                customers.add(new Customer(name));
+                Customer customer = new Customer(name);
+                customer.setRollNo(rs.getInt("id"));
+                customer.setRentedCarId(rs.getInt("rented_car_id"));
+                customers.add(customer);
             }
             conn.commit();
         } catch (SQLException e) {
@@ -56,12 +59,38 @@ public class CustomerDaoImpl implements CustomerDao{
 
     @Override
     public Customer getCustomer(int rollNo) {
-        return null;
+        Customer customer = null;
+        String query = String.format("SELECT * FROM CUSTOMER where id = %d", rollNo);
+        try (Statement stmt = conn.createStatement()) {
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                String name = rs.getString("name");
+                customer = new Customer(name);
+                customer.setRollNo(rs.getInt("id"));
+                customer.setRentedCarId(rs.getInt("rented_car_id"));
+            }
+            conn.commit();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return customer;
     }
 
     @Override
     public void updateCustomer(Customer customer) {
-
+        String query = String.format("ALTER * FROM CUSTOMER where id = %d", customer.getRollNo());
+        try (Statement stmt = conn.createStatement()) {
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                String name = rs.getString("name");
+                customer = new Customer(name);
+                customer.setRollNo(rs.getInt("id"));
+                customer.setRentedCarId(rs.getInt("rented_car_id"));
+            }
+            conn.commit();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Override

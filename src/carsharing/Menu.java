@@ -90,7 +90,7 @@ public class Menu {
                     if (customer == 0) {
                         return;
                     } else {
-                        getCustomerMenu(select.get(customer).getRollNo());
+                        getCustomerMenu(select.get(customer));
                         break;
                     }
                 } catch (NumberFormatException|IndexOutOfBoundsException e) {
@@ -100,9 +100,32 @@ public class Menu {
         }
     }
 
-    private void getCustomerMenu(int customerId) {
-
-        System.out.println();
+    private void getCustomerMenu(Customer customer) {
+        System.out.println("1. Rent a car");
+        System.out.println("2. Return a rented car");
+        System.out.println("3. My rented car");
+        System.out.println("0. Back");
+        String item = input();
+        switch(item.trim()) {
+            case "2" :
+                if (customer.getRentedCarId() == 0) {
+                    System.out.println("You didn't rent a car!");
+                } else {
+                    customer.setRentedCarId(0);
+                    tableCustomers.updateCustomer(customer);
+                }
+            case "3" : if (customer.getRentedCarId() == 0 ) {
+                    System.out.println("You didn't rent a car!");
+                } else {
+                    System.out.println("Your rented car:");
+                    Car car = tableCars.getCar(customer.getRentedCarId());
+                    System.out.println(car.getName());
+                    System.out.println("Company");
+                    Company company = tableCompanies.getCompany(car.getCompanyId());
+                    System.out.println(company.getName());
+                }
+                break;
+        }
     }
 
     private void createCustomer() {
