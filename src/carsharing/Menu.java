@@ -81,11 +81,28 @@ public class Menu {
         if (select.isEmpty()) {
             System.out.printf("The customers list is empty!%n");
         } else {
-            System.out.println("Choose a customer:");
-            select.forEach(x -> System.out.println(select.indexOf(x) + ". " + x.getName()));
-            System.out.println("0. Back");
+            while (true) {
+                System.out.println("Choose a customer:");
+                select.forEach(x -> System.out.println(select.indexOf(x) + ". " + x.getName()));
+                System.out.println("0. Back");
+                try {
+                    int customer = Integer.parseInt(input());
+                    if (customer == 0) {
+                        return;
+                    } else {
+                        getCustomerMenu(select.get(customer).getRollNo());
+                        break;
+                    }
+                } catch (NumberFormatException|IndexOutOfBoundsException e) {
+                    System.out.println("Unknown item");
+                }
+            }
         }
+    }
 
+    private void getCustomerMenu(int customerId) {
+
+        System.out.println();
     }
 
     private void createCustomer() {
