@@ -24,7 +24,9 @@ class CarDaoImpl implements CarDao{
                     "(id INTEGER PRIMARY KEY AUTO_INCREMENT, " +
                     "name VARCHAR(255) UNIQUE NOT NULL," +
                     "company_id INTEGER NOT NULL," +
-                    "FOREIGN KEY (company_id) REFERENCES COMPANY(id))";
+                    "FOREIGN KEY (company_id) REFERENCES COMPANY(id) " +
+                    "ON DELETE SET NULL " +
+                    "ON UPDATE CASCADE)";
             if (stmt.executeUpdate(createTableCar) == 0) {
                 conn.commit();
             } else {
@@ -86,13 +88,31 @@ class CarDaoImpl implements CarDao{
     }
 
     public void showCars() {
-        if (cars.isEmpty()) {
-            System.out.println("The cars list is empty!");
-        } else {
-            System.out.println("Car list:");
-            cars.forEach(x-> System.out.println((cars.indexOf(x) + 1) + ". " + x.getName()));
-            System.out.println();
-        }
+        System.out.println("Choose a car:");
+        cars.forEach(x-> System.out.println((cars.indexOf(x) + 1) + ". " + x.getName()));
+        System.out.println("0. Back");
+        System.out.println();
+    }
 
+    public ArrayList<Car> getFreeCars(int companyId) {
+        cars.clear();
+        System.out.println();
+        String query = String.format("SELECT * FROM CAR LEFT JOIN CUSTOMER " +
+                "ON CAR.id = CUSTOMER.rented_car_id  " +
+                "where company_id = %d AND rented_car_id is null",companyId);
+        try (Statement stmt = conn.createStatement()) {
+            conn.setAutoCommit(true);
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                int compId = rs.getInt("company_id");
+                cars.add(new Car(name, id, compId));
+            }
+            conn.commit();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return cars;
     }
 }

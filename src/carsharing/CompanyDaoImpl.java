@@ -95,13 +95,10 @@ public class CompanyDaoImpl implements CompanyDao {
     }
 
     public void showCompanies() {
-        if (companies.isEmpty()) {
-            System.out.println("The company list is empty!");
-        } else {
-            System.out.println("Choose the company:");
-            companies.forEach(x-> System.out.println((companies.indexOf(x) + 1) + ". " + x.getName()));
-            System.out.println("0. Back");
-        }
-
+        getAllCompanies();
+        System.out.println("Choose the company:");
+        companies.forEach(x-> System.out.println((companies.indexOf(x) + 1) + ". " + x.getName()));
+        System.out.println("0. Back");
+        System.out.println();
     }
 }

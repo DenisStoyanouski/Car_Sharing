@@ -83,9 +83,7 @@ public class Menu {
             System.out.printf("The customers list is empty!%n");
         } else {
             while (!"0".equals(customerNumber)) {
-                System.out.println("Choose a customer:");
-                select.forEach(x -> System.out.println((select.indexOf(x) + 1) + ". " + x.getName()));
-                System.out.println("0. Back");
+                tableCustomers.showCustomers();
                 try {
                     customerNumber = input();
                     int cN = Integer.parseInt(customerNumber);
@@ -115,8 +113,12 @@ public class Menu {
                 if (customer.getRentedCarId() != 0) {
                     System.out.println("You've already rented a car!");
                 } else {
-
+                    tableCars.getFreeCars(Integer.parseInt(input()));
+                    tableCars.showCars();
+                    customer.setRentedCarId(Integer.parseInt(input()));
+                    tableCustomers.updateCustomer(customer);
                 }
+                break;
             case "2" :
                 if (customer.getRentedCarId() == 0) {
                     System.out.println("You didn't rent a car!");
@@ -125,7 +127,8 @@ public class Menu {
                     tableCustomers.updateCustomer(customer);
                 }
                 break;
-            case "3" : if (customer.getRentedCarId() == 0 ) {
+            case "3" :
+                if (customer.getRentedCarId() == 0 ) {
                     System.out.println("You didn't rent a car!");
                 } else {
                     System.out.println("Your rented car:");
@@ -148,21 +151,22 @@ public class Menu {
 
     private void chooseCompany() {
         tableCompanies.getAllCompanies();
-        tableCompanies.showCompanies();
+        if (tableCompanies.companies.isEmpty()) {
+            System.out.println("The customer list is empty!");
+            return;
+        } else {
+            tableCompanies.showCompanies();
+        }
         int choice = -1;
         while(choice != 0) {
             try {
                 choice = Integer.parseInt(input().trim());
-                if (choice == 0) {
-                    return;
-                } else if (tableCompanies.companies.get(choice - 1) == null) {
-                    System.out.println("Unknown item");
-                } else {
+                if (choice != 0) {
                     System.out.printf("'%s' company%n", tableCompanies.companies.get(choice - 1).getName());
                     useTableCar(choice);
                     return;
                 }
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException|IndexOutOfBoundsException e) {
                 System.out.println("Unknown item");
             }
         }
@@ -178,7 +182,11 @@ public class Menu {
             switch(item) {
                 case "1" :
                     tableCars.getAllCars(choice);
-                    tableCars.showCars();
+                    if (tableCars.cars.isEmpty()) {
+                        System.out.println("The car list is empty!");
+                    } else {
+                        tableCars.showCars();
+                    }
                     break;
                 case "2" : System.out.println("Enter the car name:");
                             String carName = input().trim();

@@ -29,7 +29,7 @@ public class Customer {
         return rentedCarId;
     }
 
-    public void setRentedCarId(int companyId) {
+    public void setRentedCarId(int rentedCarId) {
         this.rentedCarId = rentedCarId;
     }
 
