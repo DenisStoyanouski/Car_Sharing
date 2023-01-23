@@ -5,10 +5,8 @@ public class Customer {
     private int rollNo;
     private int rentedCarId;
 
-    Customer(String name, int rollNo, int rentedCarId){
+    Customer(String name) {
         this.name = name;
-        this.rollNo = rollNo;
-        this.rentedCarId = rentedCarId;
     }
 
     public String getName() {

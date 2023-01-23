@@ -1,6 +1,7 @@
 package carsharing;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -36,8 +37,21 @@ public class CustomerDaoImpl implements CustomerDao{
     }
 
     @Override
-    public ArrayList<Customer> getAllCustomer(int rentedCarId) {
-        return null;
+    public ArrayList<Customer> getAllCustomer() {
+        customers.clear();
+        System.out.println();
+        String query = "SELECT * FROM CUSTOMER";
+        try (Statement stmt = conn.createStatement()) {
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                String name = rs.getString("name");
+                customers.add(new Customer(name));
+            }
+            conn.commit();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return customers;
     }
 
     @Override

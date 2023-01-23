@@ -3,7 +3,7 @@ package carsharing;
 import java.util.ArrayList;
 
 public interface CustomerDao {
-    public ArrayList<Customer> getAllCustomer(int rentedCarId);
+    public ArrayList<Customer> getAllCustomer();
     public Customer getCustomer(int rollNo);
     public void updateCustomer(Customer customer);
     public void deleteCustomer(Customer customer);

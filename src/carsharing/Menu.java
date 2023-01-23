@@ -33,7 +33,7 @@ public class Menu {
             switch (item.trim()) {
                 case "1" : loginManager();
                     break;
-                case "2" : //loginCustomer();
+                case "2" : loginCustomer();
                     break;
                 case "3" : createCustomer();
                     break;
@@ -52,11 +52,6 @@ public class Menu {
     private static String input() {
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
-    }
-
-    private void createCustomer() {
-        System.out.println("Enter the customer name:");
-        tableCustomers.addCustomer(input());
     }
 
     private void loginManager() {
@@ -79,6 +74,23 @@ public class Menu {
                     System.out.println("Unknown query");
             }
         }
+    }
+
+    private void loginCustomer() {
+        ArrayList<Customer> select = tableCustomers.getAllCustomer();
+        if (select.isEmpty()) {
+            System.out.printf("The customers list is empty!%n");
+        } else {
+            System.out.println("Choose a customer:");
+            select.forEach(x -> System.out.println(select.indexOf(x) + ". " + x.getName()));
+            System.out.println("0. Back");
+        }
+
+    }
+
+    private void createCustomer() {
+        System.out.println("Enter the customer name:");
+        tableCustomers.addCustomer(input());
     }
 
     private void chooseCompany() {
