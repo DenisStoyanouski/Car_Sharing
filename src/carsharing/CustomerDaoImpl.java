@@ -80,8 +80,14 @@ public class CustomerDaoImpl implements CustomerDao{
 
     @Override
     public void updateCustomer(Customer customer) {
-        String query = String.format("UPDATE CUSTOMER " +
-                "SET rented_car_id = %d where id = %d", customer.getRentedCarId(), customer.getRollNo());
+        String query = null;
+        if (customer.getRentedCarId() == 0) {
+            query= String.format("UPDATE CUSTOMER " +
+                    "SET rented_car_id = NULL where id = %d", customer.getRollNo());
+        } else {
+            query= String.format("UPDATE CUSTOMER " +
+                    "SET rented_car_id = %d where id = %d", customer.getRentedCarId(), customer.getRollNo());
+        }
         try (Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(query);
             conn.commit();

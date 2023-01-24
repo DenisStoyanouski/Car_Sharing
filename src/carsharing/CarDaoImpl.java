@@ -40,7 +40,6 @@ class CarDaoImpl implements CarDao{
     @Override
     public ArrayList<Car> getAllCars(int companyId) {
         cars.clear();
-        System.out.println();
         String query = String.format("SELECT * FROM CAR where company_id = %d",companyId);
         try (Statement stmt = conn.createStatement()) {
             conn.setAutoCommit(true);
@@ -60,7 +59,23 @@ class CarDaoImpl implements CarDao{
 
     @Override
     public Car getCar(int rollNo) {
-        return null;
+        int id = 0;
+        String name = null;
+        int compId = 0;
+        String query = String.format("SELECT * FROM CAR where company_id = %d", rollNo);
+        try (Statement stmt = conn.createStatement()) {
+            conn.setAutoCommit(true);
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                id = rs.getInt("id");
+                name = rs.getString("name");
+                compId = rs.getInt("company_id");
+            }
+            conn.commit();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return new Car(name, id, compId);
     }
 
     @Override

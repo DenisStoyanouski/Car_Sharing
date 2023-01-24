@@ -22,7 +22,7 @@ public class Menu {
         tableCustomers = new CustomerDaoImpl(connection);
     }
     public void startMainMenu() {
-
+        //Print the main menu
         String item;
         while (true) {
             System.out.println("1. Log in as a manager");
@@ -50,11 +50,13 @@ public class Menu {
     }
 
     private static String input() {
+        //Get input from CLI
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
     }
 
     private void loginManager() {
+        //Print Manager menu
         String item = null;
         while (!"0".equals(item)) {
             System.out.printf("1. Company list%n");
@@ -63,11 +65,11 @@ public class Menu {
             item = input();
             switch(item.trim()) {
                 case "1" :
-                    chooseCompany();
+                    chooseCompany(); //print company list
                     break;
                 case "2" :
                     System.out.println("Enter the company name:");
-                    tableCompanies.addCompany(input());
+                    tableCompanies.addCompany(input()); //create new company with name from input
                     break;
                 case "0" : return;
                 default :
@@ -76,22 +78,68 @@ public class Menu {
         }
     }
 
+    private void chooseCompany() {
+        tableCompanies.getAllCompanies();
+        String item = null;
+        if (tableCompanies.companies.isEmpty()) {
+            System.out.println("The company list is empty!");
+        } else {
+            while(!"0".equals(item)) {
+            tableCompanies.showCompanies();
+                try {
+                    item = input().trim();
+                    if (!"0".equals(item)) {
+                        int companyNumb = Integer.parseInt(item) - 1;
+                        System.out.printf("'%s' company%n", tableCompanies.companies.get(companyNumb).getName());
+                        useTableCar(tableCompanies.companies.get(companyNumb).getRollNo());
+                    }
+                } catch (NumberFormatException|IndexOutOfBoundsException e) {
+                    System.out.println("Unknown item");
+                }
+            }
+        }
+    }
+
+    private void useTableCar(int companyId) {
+        String item = null;
+        while( !"0".equals(item)) {
+            tableCars.getAllCars(companyId);
+            System.out.printf("1. Car list%n");
+            System.out.printf("2. Create a car%n");
+            System.out.println("0. Back");
+            item = input().trim();
+            switch(item) {
+                case "1" :
+                    if (tableCars.cars.isEmpty()) {
+                        System.out.println("The car list is empty!");
+                    } else {
+                        tableCars.showCars();
+                    }
+                    break;
+                case "2" : System.out.println("Enter the car name:");
+                            String carName = input().trim();
+                            tableCars.addCar(carName, companyId);
+                            break;
+                case "0" : return;
+                default :
+                    System.out.println("Unknown item");
+            }
+        }
+    }
+
     private void loginCustomer() {
-        ArrayList<Customer> select = tableCustomers.getAllCustomer();
-        String customerNumber = null;
-        if (select.isEmpty()) {
+        tableCustomers.getAllCustomer();
+        String item = null;
+        if (tableCustomers.customers.isEmpty()) {
             System.out.printf("The customers list is empty!%n");
         } else {
-            while (!"0".equals(customerNumber)) {
+            while (!"0".equals(item)) {
                 tableCustomers.showCustomers();
+                item = input();
                 try {
-                    customerNumber = input();
-                    int cN = Integer.parseInt(customerNumber);
-                    if (cN == 0) {
-                        return;
-                    } else {
-                        getCustomerMenu(select.get(cN - 1));
-                        break;
+                    int customerIndex = Integer.parseInt(item);
+                    if (customerIndex != 0) {
+                        getCustomerMenu(tableCustomers.customers.get(customerIndex - 1));
                     }
                 } catch (NumberFormatException|IndexOutOfBoundsException e) {
                     System.out.println("Unknown item");
@@ -113,10 +161,14 @@ public class Menu {
                 if (customer.getRentedCarId() != 0) {
                     System.out.println("You've already rented a car!");
                 } else {
-                    tableCars.getFreeCars(Integer.parseInt(input()));
+                    int companyNum = Integer.parseInt(input());
+                    tableCars.getFreeCars(companyNum);
                     tableCars.showCars();
-                    customer.setRentedCarId(Integer.parseInt(input()));
+                    int carNum = Integer.parseInt(input());
+                    customer.setRentedCarId(tableCars.cars.get(carNum - 1).getRollNo());
                     tableCustomers.updateCustomer(customer);
+                    tableCars.getAllCars(companyNum);
+                    System.out.printf("You rented '%s'%n", tableCars.getCar(customer.getRentedCarId()).getName());
                 }
                 break;
             case "2" :
@@ -147,55 +199,5 @@ public class Menu {
     private void createCustomer() {
         System.out.println("Enter the customer name:");
         tableCustomers.addCustomer(input());
-    }
-
-    private void chooseCompany() {
-        tableCompanies.getAllCompanies();
-        if (tableCompanies.companies.isEmpty()) {
-            System.out.println("The customer list is empty!");
-            return;
-        } else {
-            tableCompanies.showCompanies();
-        }
-        int choice = -1;
-        while(choice != 0) {
-            try {
-                choice = Integer.parseInt(input().trim());
-                if (choice != 0) {
-                    System.out.printf("'%s' company%n", tableCompanies.companies.get(choice - 1).getName());
-                    useTableCar(choice);
-                    return;
-                }
-            } catch (NumberFormatException|IndexOutOfBoundsException e) {
-                System.out.println("Unknown item");
-            }
-        }
-    }
-
-    private void useTableCar(int choice) {
-        String item = null;
-        while( !"0".equals(item)) {
-            System.out.printf("1. Car list%n");
-            System.out.printf("2. Create a car%n");
-            System.out.println("0. Back");
-            item = input().trim();
-            switch(item) {
-                case "1" :
-                    tableCars.getAllCars(choice);
-                    if (tableCars.cars.isEmpty()) {
-                        System.out.println("The car list is empty!");
-                    } else {
-                        tableCars.showCars();
-                    }
-                    break;
-                case "2" : System.out.println("Enter the car name:");
-                            String carName = input().trim();
-                            tableCars.addCar(carName, choice);
-                            break;
-                case "0" : return;
-                default :
-                    System.out.println("Unknown item");
-            }
-        }
     }
 }
