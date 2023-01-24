@@ -62,7 +62,7 @@ class CarDaoImpl implements CarDao{
         int id = 0;
         String name = null;
         int compId = 0;
-        String query = String.format("SELECT * FROM CAR where company_id = %d", rollNo);
+        String query = String.format("SELECT * FROM CAR where id = %d", rollNo);
         try (Statement stmt = conn.createStatement()) {
             conn.setAutoCommit(true);
             ResultSet rs = stmt.executeQuery(query);
