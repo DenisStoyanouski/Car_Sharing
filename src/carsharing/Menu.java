@@ -1,7 +1,6 @@
 package carsharing;
 
 import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Menu {
@@ -21,7 +20,7 @@ public class Menu {
         tableCars = new CarDaoImpl(connection);
         tableCustomers = new CustomerDaoImpl(connection);
     }
-    public void startMainMenu() {
+    public void startMainMenu()  {
         //Print the main menu
         String item;
         while (true) {
@@ -57,13 +56,13 @@ public class Menu {
 
     private void loginManager() {
         //Print Manager menu
-        String item = null;
-        while (!"0".equals(item)) {
+        String itemMenu = null;
+        while (!"0".equals(itemMenu)) {
             System.out.printf("1. Company list%n");
             System.out.printf("2. Create a company%n");
             System.out.println("0. Back");
-            item = input();
-            switch(item.trim()) {
+            itemMenu = input().trim();
+            switch(itemMenu) {
                 case "1" :
                     chooseCompany(); //print company list
                     break;
@@ -101,23 +100,19 @@ public class Menu {
     }
 
     private void useTableCar(int companyId) {
-        String item = null;
-        while( !"0".equals(item)) {
-            tableCars.getAllCars(companyId);
+        tableCars.getAllCars(companyId);
+        String itemCarMenu = null;
+        while( !"0".equals(itemCarMenu)) {
             System.out.printf("1. Car list%n");
             System.out.printf("2. Create a car%n");
             System.out.println("0. Back");
-            item = input().trim();
-            switch(item) {
-                case "1" :
-                    if (tableCars.cars.isEmpty()) {
-                        System.out.println("The car list is empty!");
-                    } else {
-                        tableCars.showCars();
-                    }
-                    break;
+            itemCarMenu = input().trim();
+            switch(itemCarMenu) {
+                case "1" :  chooseCar();
+                            break;
                 case "2" : System.out.println("Enter the car name:");
                             String carName = input().trim();
+                            tableCars.cars.add(new Car(carName,companyId));
                             tableCars.addCar(carName, companyId);
                             break;
                 case "0" : return;
@@ -127,11 +122,25 @@ public class Menu {
         }
     }
 
+    private void chooseCar() {
+        String item = null;
+        if (tableCars.cars.isEmpty()) {
+            System.out.println("The car list is empty!");
+            return;
+        }
+        while (!"0".equals(item)) {
+            tableCars.showCars();
+            item = input().trim();
+        }
+        loginManager();
+    }
+
     private void loginCustomer() {
         tableCustomers.getAllCustomer();
         String item = null;
         if (tableCustomers.customers.isEmpty()) {
-            System.out.printf("The customers list is empty!%n");
+            System.out.printf("The customer list is empty!%n");
+
         } else {
             while (!"0".equals(item)) {
                 tableCustomers.showCustomers();
@@ -149,51 +158,56 @@ public class Menu {
     }
 
     private void getCustomerMenu(Customer customer) {
-        System.out.println("1. Rent a car");
-        System.out.println("2. Return a rented car");
-        System.out.println("3. My rented car");
-        System.out.println("0. Back");
-        String item = input();
-        switch(item.trim()) {
-            case "0" : return;
-            case "1" :
-                tableCompanies.showCompanies();
-                if (customer.getRentedCarId() != 0) {
-                    System.out.println("You've already rented a car!");
-                } else {
-                    int companyNum = Integer.parseInt(input());
-                    tableCars.getFreeCars(companyNum);
-                    tableCars.showCars();
-                    int carNum = Integer.parseInt(input());
-                    customer.setRentedCarId(tableCars.cars.get(carNum - 1).getRollNo());
-                    tableCustomers.updateCustomer(customer);
-                    tableCars.getAllCars(companyNum);
-                    System.out.printf("You rented '%s'%n", tableCars.getCar(customer.getRentedCarId()).getName());
-                }
-                break;
-            case "2" :
-                if (customer.getRentedCarId() == 0) {
-                    System.out.println("You didn't rent a car!");
-                } else {
-                    customer.setRentedCarId(0);
-                    tableCustomers.updateCustomer(customer);
-                }
-                break;
-            case "3" :
-                if (customer.getRentedCarId() == 0 ) {
-                    System.out.println("You didn't rent a car!");
-                } else {
-                    System.out.println("Your rented car:");
-                    Car car = tableCars.getCar(customer.getRentedCarId());
-                    System.out.println(car.getName());
-                    System.out.println("Company");
-                    Company company = tableCompanies.getCompany(car.getCompanyId());
-                    System.out.println(company.getName());
-                }
-                break;
-            default:
-                System.out.println("Unknown item");
+        String item = null;
+        while (!"0".equals(item)) {
+            System.out.println("1. Rent a car");
+            System.out.println("2. Return a rented car");
+            System.out.println("3. My rented car");
+            System.out.println("0. Back");
+            item = input();
+            switch(item.trim()) {
+                case "0" : return;
+                case "1" :
+                    if (customer.getRentedCarId() != 0) {
+                        System.out.println("You've already rented a car!");
+                    } else {
+                        tableCompanies.showCompanies();
+                        int companyNum = Integer.parseInt(input());
+                        tableCars.getFreeCars(companyNum);
+                        tableCars.showCars();
+                        int carNum = Integer.parseInt(input());
+                        customer.setRentedCarId(tableCars.cars.get(carNum - 1).getRollNo());
+                        tableCustomers.updateCustomer(customer);
+                        tableCars.getAllCars(companyNum);
+                        System.out.printf("You rented '%s'%n", tableCars.getCar(customer.getRentedCarId()).getName());
+                    }
+                    break;
+                case "2" :
+                    if (customer.getRentedCarId() == 0) {
+                        System.out.println("You didn't rent a car!");
+                    } else {
+                        customer.setRentedCarId(0);
+                        tableCustomers.updateCustomer(customer);
+                        System.out.println("You've returned a rented car!");
+                    }
+                    break;
+                case "3" :
+                    if (customer.getRentedCarId() == 0 ) {
+                        System.out.println("You didn't rent a car!");
+                    } else {
+                        System.out.println("Your rented car:");
+                        Car car = tableCars.getCar(customer.getRentedCarId());
+                        System.out.println(car.getName());
+                        System.out.println("Company");
+                        Company company = tableCompanies.getCompany(car.getCompanyId());
+                        System.out.println(company.getName());
+                    }
+                    break;
+                default:
+                    System.out.println("Unknown item");
+            }
         }
+
     }
 
     private void createCustomer() {
