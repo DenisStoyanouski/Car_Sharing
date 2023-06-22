@@ -5,13 +5,13 @@ public class Car {
     private int rollNo;
     private int companyId;
 
-    Car(String name, int rollNo, int companyId){
+    Car(String name, int rollNo, int companyId) {
         this.name = name;
         this.rollNo = rollNo;
         this.companyId = companyId;
     }
 
-    Car(String name, int companyId){
+    Car(String name, int companyId) {
         this.name = name;
         this.companyId = companyId;
     }

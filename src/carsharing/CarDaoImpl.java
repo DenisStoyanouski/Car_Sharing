@@ -6,12 +6,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-class CarDaoImpl implements CarDao{
+class CarDaoImpl implements CarDao {
 
     Connection conn;
     ArrayList<Car> cars;
 
-    public CarDaoImpl(Connection conn){
+    public CarDaoImpl(Connection conn) {
         this.conn = conn;
         this.cars = new ArrayList<>();
         createTable();
@@ -20,7 +20,7 @@ class CarDaoImpl implements CarDao{
     private void createTable() {
         try (Statement stmt = conn.createStatement()) {
             conn.setAutoCommit(true);
-            String createTableCar =  "CREATE TABLE IF NOT EXISTS CAR  " +
+            String createTableCar = "CREATE TABLE IF NOT EXISTS CAR  " +
                     "(id INTEGER PRIMARY KEY AUTO_INCREMENT, " +
                     "name VARCHAR(255) UNIQUE NOT NULL," +
                     "company_id INTEGER NOT NULL," +
@@ -40,7 +40,7 @@ class CarDaoImpl implements CarDao{
     @Override
     public ArrayList<Car> getAllCars(int companyId) {
         cars.clear();
-        String query = String.format("SELECT * FROM CAR where company_id = %d",companyId);
+        String query = String.format("SELECT * FROM CAR where company_id = %d", companyId);
         try (Statement stmt = conn.createStatement()) {
             conn.setAutoCommit(true);
             ResultSet rs = stmt.executeQuery(query);
@@ -104,7 +104,7 @@ class CarDaoImpl implements CarDao{
 
     public void showCars() {
         System.out.println("Choose a car:");
-        cars.forEach(x-> System.out.println((cars.indexOf(x) + 1) + ". " + x.getName()));
+        cars.forEach(x -> System.out.println((cars.indexOf(x) + 1) + ". " + x.getName()));
         System.out.println("0. Back");
         System.out.println();
     }
@@ -114,7 +114,7 @@ class CarDaoImpl implements CarDao{
         System.out.println();
         String query = String.format("SELECT * FROM CAR LEFT JOIN CUSTOMER " +
                 "ON CAR.id = CUSTOMER.rented_car_id  " +
-                "where company_id = %d AND rented_car_id is null",companyId);
+                "where company_id = %d AND rented_car_id is null", companyId);
         try (Statement stmt = conn.createStatement()) {
             conn.setAutoCommit(true);
             ResultSet rs = stmt.executeQuery(query);

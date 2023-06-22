@@ -6,12 +6,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class CustomerDaoImpl implements CustomerDao{
+public class CustomerDaoImpl implements CustomerDao {
 
     Connection conn;
-    
+
     ArrayList<Customer> customers;
-    
+
     CustomerDaoImpl(Connection conn) {
         this.conn = conn;
         this.customers = new ArrayList<>();
@@ -21,7 +21,7 @@ public class CustomerDaoImpl implements CustomerDao{
     private void createTable() {
         try (Statement stmt = conn.createStatement()) {
             conn.setAutoCommit(true);
-            String createCompanyTable =  "CREATE TABLE IF NOT EXISTS CUSTOMER  " +
+            String createCompanyTable = "CREATE TABLE IF NOT EXISTS CUSTOMER  " +
                     "(id INTEGER PRIMARY KEY AUTO_INCREMENT, " +
                     " name VARCHAR(255) UNIQUE NOT NULL," +
                     " rented_car_id INTEGER DEFAULT NULL," +
@@ -82,10 +82,10 @@ public class CustomerDaoImpl implements CustomerDao{
     public void updateCustomer(Customer customer) {
         String query = null;
         if (customer.getRentedCarId() == 0) {
-            query= String.format("UPDATE CUSTOMER " +
+            query = String.format("UPDATE CUSTOMER " +
                     "SET rented_car_id = NULL where id = %d", customer.getRollNo());
         } else {
-            query= String.format("UPDATE CUSTOMER " +
+            query = String.format("UPDATE CUSTOMER " +
                     "SET rented_car_id = %d where id = %d", customer.getRentedCarId(), customer.getRollNo());
         }
         try (Statement stmt = conn.createStatement()) {
@@ -100,6 +100,7 @@ public class CustomerDaoImpl implements CustomerDao{
     public void deleteCustomer(Customer customer) {
 
     }
+
     @Override
     public void addCustomer(String nameCustomer) {
         try (Statement stmt = conn.createStatement()) {
@@ -117,7 +118,7 @@ public class CustomerDaoImpl implements CustomerDao{
 
     public void showCustomers() {
         System.out.println("Customer list:");
-        customers.forEach(x-> System.out.println((customers.indexOf(x) + 1) + ". " + x.getName()));
+        customers.forEach(x -> System.out.println((customers.indexOf(x) + 1) + ". " + x.getName()));
         System.out.println("0. Back");
         System.out.println();
     }

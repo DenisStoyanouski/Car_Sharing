@@ -13,14 +13,14 @@ public class Menu {
     private CustomerDaoImpl tableCustomers;
 
 
-
     public Menu(Connection connection) {
         this.connection = connection;
         tableCompanies = new CompanyDaoImpl(connection);
         tableCars = new CarDaoImpl(connection);
         tableCustomers = new CustomerDaoImpl(connection);
     }
-    public void startMainMenu()  {
+
+    public void startMainMenu() {
         //Print the main menu
         String item;
         while (true) {
@@ -30,15 +30,19 @@ public class Menu {
             System.out.println("0. Exit");
             item = input();
             switch (item.trim()) {
-                case "1" : loginManager();
+                case "1":
+                    loginManager();
                     break;
-                case "2" : loginCustomer();
+                case "2":
+                    loginCustomer();
                     break;
-                case "3" : createCustomer();
+                case "3":
+                    createCustomer();
                     break;
-                case "0" : exit();
+                case "0":
+                    exit();
                     break;
-                default :
+                default:
                     System.out.println("Unknown command");
             }
         }
@@ -62,16 +66,17 @@ public class Menu {
             System.out.printf("2. Create a company%n");
             System.out.println("0. Back");
             itemMenu = input().trim();
-            switch(itemMenu) {
-                case "1" :
+            switch (itemMenu) {
+                case "1":
                     chooseCompany(); //print company list
                     break;
-                case "2" :
+                case "2":
                     System.out.println("Enter the company name:");
                     tableCompanies.addCompany(input()); //create new company with name from input
                     break;
-                case "0" : return;
-                default :
+                case "0":
+                    return;
+                default:
                     System.out.println("Unknown query");
             }
         }
@@ -83,8 +88,8 @@ public class Menu {
         if (tableCompanies.companies.isEmpty()) {
             System.out.println("The company list is empty!");
         } else {
-            while(!"0".equals(item)) {
-            tableCompanies.showCompanies();
+            while (!"0".equals(item)) {
+                tableCompanies.showCompanies();
                 try {
                     item = input().trim();
                     if (!"0".equals(item)) {
@@ -92,7 +97,7 @@ public class Menu {
                         System.out.printf("'%s' company%n", tableCompanies.companies.get(companyNumb).getName());
                         useTableCar(tableCompanies.companies.get(companyNumb).getRollNo());
                     }
-                } catch (NumberFormatException|IndexOutOfBoundsException e) {
+                } catch (NumberFormatException | IndexOutOfBoundsException e) {
                     System.out.println("Unknown item");
                 }
             }
@@ -102,21 +107,24 @@ public class Menu {
     private void useTableCar(int companyId) {
         tableCars.getAllCars(companyId);
         String itemCarMenu = null;
-        while( !"0".equals(itemCarMenu)) {
+        while (!"0".equals(itemCarMenu)) {
             System.out.printf("1. Car list%n");
             System.out.printf("2. Create a car%n");
             System.out.println("0. Back");
             itemCarMenu = input().trim();
-            switch(itemCarMenu) {
-                case "1" :  chooseCar();
-                            break;
-                case "2" : System.out.println("Enter the car name:");
-                            String carName = input().trim();
-                            tableCars.cars.add(new Car(carName,companyId));
-                            tableCars.addCar(carName, companyId);
-                            break;
-                case "0" : return;
-                default :
+            switch (itemCarMenu) {
+                case "1":
+                    chooseCar();
+                    break;
+                case "2":
+                    System.out.println("Enter the car name:");
+                    String carName = input().trim();
+                    tableCars.cars.add(new Car(carName, companyId));
+                    tableCars.addCar(carName, companyId);
+                    break;
+                case "0":
+                    return;
+                default:
                     System.out.println("Unknown item");
             }
         }
@@ -150,7 +158,7 @@ public class Menu {
                     if (customerIndex != 0) {
                         getCustomerMenu(tableCustomers.customers.get(customerIndex - 1));
                     }
-                } catch (NumberFormatException|IndexOutOfBoundsException e) {
+                } catch (NumberFormatException | IndexOutOfBoundsException e) {
                     System.out.println("Unknown item");
                 }
             }
@@ -165,9 +173,10 @@ public class Menu {
             System.out.println("3. My rented car");
             System.out.println("0. Back");
             item = input();
-            switch(item.trim()) {
-                case "0" : return;
-                case "1" :
+            switch (item.trim()) {
+                case "0":
+                    return;
+                case "1":
                     if (customer.getRentedCarId() != 0) {
                         System.out.println("You've already rented a car!");
                     } else {
@@ -182,7 +191,7 @@ public class Menu {
                         System.out.printf("You rented '%s'%n", tableCars.getCar(customer.getRentedCarId()).getName());
                     }
                     break;
-                case "2" :
+                case "2":
                     if (customer.getRentedCarId() == 0) {
                         System.out.println("You didn't rent a car!");
                     } else {
@@ -191,8 +200,8 @@ public class Menu {
                         System.out.println("You've returned a rented car!");
                     }
                     break;
-                case "3" :
-                    if (customer.getRentedCarId() == 0 ) {
+                case "3":
+                    if (customer.getRentedCarId() == 0) {
                         System.out.println("You didn't rent a car!");
                     } else {
                         System.out.println("Your rented car:");

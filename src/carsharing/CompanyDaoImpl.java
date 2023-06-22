@@ -9,7 +9,7 @@ public class CompanyDaoImpl implements CompanyDao {
     Connection conn;
     ArrayList<Company> companies;
 
-    public CompanyDaoImpl(Connection conn){
+    public CompanyDaoImpl(Connection conn) {
         this.conn = conn;
         this.companies = new ArrayList<>();
         createTable();
@@ -18,7 +18,7 @@ public class CompanyDaoImpl implements CompanyDao {
     private void createTable() {
         try (Statement stmt = conn.createStatement()) {
             conn.setAutoCommit(true);
-            String createCompanyTable =  "CREATE TABLE IF NOT EXISTS COMPANY  " +
+            String createCompanyTable = "CREATE TABLE IF NOT EXISTS COMPANY  " +
                     "(id INTEGER PRIMARY KEY AUTO_INCREMENT, " +
                     " name VARCHAR(255) UNIQUE NOT NULL)";
             if (stmt.executeUpdate(createCompanyTable) == 0) {
@@ -97,7 +97,7 @@ public class CompanyDaoImpl implements CompanyDao {
     public void showCompanies() {
         getAllCompanies();
         System.out.println("Choose the company:");
-        companies.forEach(x-> System.out.println((companies.indexOf(x) + 1) + ". " + x.getName()));
+        companies.forEach(x -> System.out.println((companies.indexOf(x) + 1) + ". " + x.getName()));
         System.out.println("0. Back");
         System.out.println();
     }

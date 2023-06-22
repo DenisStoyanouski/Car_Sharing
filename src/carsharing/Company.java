@@ -4,7 +4,7 @@ public class Company {
     private String name;
     private int rollNo;
 
-    Company(String name, int rollNo){
+    Company(String name, int rollNo) {
         this.name = name;
         this.rollNo = rollNo;
     }

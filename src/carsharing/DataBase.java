@@ -27,7 +27,7 @@ class DataBase {
         // STEP 1: Register JDBC driver
         try {
             Class.forName(JDBC_DRIVER);
-        } catch(ClassNotFoundException e) {
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         //STEP 2: Open a connection

@@ -32,5 +32,4 @@ public class Customer {
     public void setRentedCarId(int rentedCarId) {
         this.rentedCarId = rentedCarId;
     }
-
 }
